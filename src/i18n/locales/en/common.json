@@ -1,0 +1,168 @@
+{
+  "history": "History",
+  "settings": "Settings",
+  "back": "Back",
+  "send": "Send",
+  "error": "Something went wrong. Please try again.",
+  "auth.back": "Back to assistant",
+  "auth.panelTitle": "Your voice for a better community.",
+  "auth.panelDescription": "Save your conversations and continue asking about public services, schemes, and local development.",
+  "auth.benefitOne": "Access your conversations anywhere",
+  "auth.benefitTwo": "Continue chats across voice and text",
+  "auth.benefitThree": "Keep your account and preferences secure",
+  "auth.loginTitle": "Welcome back",
+  "auth.signupTitle": "Create your account",
+  "auth.loginDescription": "Sign in to continue to your public assistant.",
+  "auth.signupDescription": "Create an account to save conversations and access them anywhere.",
+  "auth.name": "Full name",
+  "auth.email": "Email address",
+  "auth.password": "Password",
+  "auth.loginButton": "Sign in",
+  "auth.signupButton": "Create account",
+  "auth.haveAccount": "Already have an account?",
+  "auth.noAccount": "New to the assistant?",
+  "auth.loginLink": "Sign in",
+  "auth.signupLink": "Create one",
+  "auth.showPassword": "Show password",
+  "auth.hidePassword": "Hide password",
+  "auth.privacyNote": "Your conversations are protected and only saved to your account when you sign in.",
+  "auth.genericError": "Unable to complete authentication. Please try again.",
+  "auth.logoutConfirmation": "Are you sure you want to log out?",
+  "auth.logoutTitle": "Log out?",
+  "auth.logout": "Log out",
+  "auth.cancel": "Cancel",
+  "auth.deleteAccountTitle": "Delete account?",
+  "auth.deleteAccountConfirmation": "Delete your account and all saved conversations? This cannot be undone.",
+  "auth.deleteAccount": "Delete account",
+  "ok": "OK",
+  "close": "Close",
+  "languageSheet.title": "Choose language",
+  "languageSheet.subtitle": "You can change this anytime from the top menu.",
+
+  "home.greeting": "Hello Jhansi-Lalitpur!",
+  "home.description": "Connect with MP Anurag Sharma and ask directly about development work, problems or government schemes",
+  "home.suggestedQuestions": "Suggested Questions",
+  "home.showMore": "Show next",
+  "home.photo": "Problem Photo",
+  "home.type": "Ask by typing",
+  "home.photoComingSoonTitle": "Coming soon",
+  "home.photoComingSoonMessage": "Problem Photo is coming soon. You will be able to share a photo of a local issue here.",
+
+  "chat.title": "Ask",
+  "chat.subtitle": "Ask your question",
+  "chat.placeholder": "Type your question...",
+  "chat.emptyState": "Type your question and we will help you.",
+  "chat.welcomeTitle": "Hello! I am your public assistant.",
+  "chat.welcomeMessage": "Ask me about government schemes, local development work, public services, or any problem you want help with.",
+  "chat.sent": "Sent",
+  "chat.copy": "Copy answer",
+  "chat.share": "Share answer",
+  "chat.listen": "Listen to answer",
+  "chat.newConversation": "Start a new conversation",
+  "chat.openVoice": "Open voice mode",
+  "chat.moreOptions": "More options",
+  "chat.followUpTitle": "Choose a follow-up question",
+  "chat.followUpRoads": "What road work is planned in my area?",
+  "chat.followUpSchemes": "Which government schemes can I apply for?",
+  "chat.followUpDocuments": "Which documents do I need to apply?",
+  "chat.followUpHealthcare": "Where can I get healthcare support?",
+  "chat.followUpNextStep": "What should I do next for this issue?",
+  "chat.followUpEligibility": "Am I eligible for this assistance?",
+  "chat.followUpAgriculture": "Which farmer schemes can I apply for?",
+  "chat.followUpEducation": "Which scholarships can students apply for?",
+  "chat.followUpHousing": "Which housing support can I apply for?",
+  "chat.followUpEmployment": "Which skill-training or job support can I apply for?",
+  "historyPage.delete": "Delete",
+  "historyPage.deleteTitle": "Delete conversation?",
+  "historyPage.deleteMessage": "Delete this conversation? This cannot be undone.",
+  "chat.source": "Source: MP Public Assistant",
+  "chat.attachPhoto": "Attach a photo",
+  "chat.useMicrophone": "Ask using microphone",
+  "chat.voiceUnavailable": "Voice typing is not supported in this browser.",
+  "chat.voiceError": "Unable to hear your voice. Please try again.",
+  "chat.removePhoto": "Remove photo",
+  "chat.responseActions": "Response options",
+  "chat.changeLanguage": "Change response language",
+
+  "suggestions.smartCity.title": "Digital India",
+  "suggestions.smartCity.description": "Online citizen services......",
+
+  "suggestions.water.title": "Government Schemes",
+  "suggestions.water.description": "Benefits for Indian families......",
+
+  "suggestions.corridor.title": "Indian Constitution",
+  "suggestions.corridor.description": "Rights and civic duties.....",
+  "suggestions.health.title": "Public Healthcare",
+  "suggestions.health.description": "Ayushman Bharat and hospitals......",
+  "suggestions.education.title": "Indian Education",
+  "suggestions.education.description": "Scholarships and admissions......",
+  "suggestions.documents.title": "Indian Elections",
+  "suggestions.documents.description": "Voting and voter services......"
+  ,"voice.history": "History"
+  ,"voice.selectLanguage": "Select language"
+  ,"voice.problemPhoto": "Problem photo"
+  ,"voice.askByTyping": "Ask by typing"
+  ,"voice.speakAgain": "Speak again"
+  ,"voice.listening": "Listening..."
+  ,"voice.startSpeaking": "Start speaking..."
+  ,"voice.listeningHint": "Your answer will be prepared when you finish speaking"
+  ,"voice.transcriptTitle": "I heard this"
+  ,"voice.edit": "Edit"
+  ,"voice.doneEditing": "Done"
+  ,"voice.editing": "Edit your question, then press Send"
+  ,"voice.reviewBeforeSend": "Review your question or press Edit to change it"
+  ,"voice.autoSend": "Will send automatically in 2 seconds"
+  ,"voice.send": "Send"
+  ,"voice.editWithKeyboard": "Edit with keyboard"
+  ,"voice.thinking": "Understanding..."
+  ,"voice.permissionTitle": "Microphone permission is required"
+  ,"voice.permissionText": "Allow microphone access in your device settings to ask by voice."
+  ,"voice.allowAgain": "Try permission again"
+  ,"voice.noSpeechTitle": "Nothing was heard"
+  ,"voice.noSpeechText": "No voice was detected. Press the button below and try again."
+  ,"voice.answerErrorTitle": "Unable to get an answer"
+  ,"voice.answerErrorText": "Your question was understood, but the answer could not be prepared. Please try again."
+  ,"voice.tryAgain": "Try again"
+  ,"voice.assistantName": "MP Public Assistant AI"
+  ,"voice.leaderName": "MP Anurag Sharma"
+  ,"voice.answerPlaying": "The answer is being read aloud"
+  ,"voice.audioUnavailable": "Using your device voice"
+  ,"voice.auto": "Auto"
+  ,"voice.source": "Source: MP office · 12 September 2026"
+  ,"voice.speed": "Playback speed"
+  ,"voice.nextQuestion": "Speak or type your next question..."
+  ,"voice.answerHeading": "In Babina block, the Har Ghar Nal scheme is 80% complete."
+  ,"voice.answerBody": "Instructions have been given to complete the remaining work by next month. The road widening tender is approved and work will begin in November."
+  ,"historyPage.title": "Previous conversations"
+  ,"historyPage.subtitle": "{{count}} conversations saved"
+  ,"historyPage.search": "Search previous conversations..."
+  ,"historyPage.clearSearch": "Clear search"
+  ,"historyPage.newChat": "Start a new conversation"
+  ,"historyPage.rename": "Rename conversation"
+  ,"historyPage.renameTitle": "Rename conversation"
+  ,"historyPage.cancel": "Cancel"
+  ,"historyPage.save": "Save"
+  ,"settingsPage.title": "Voice and listening"
+  ,"settingsPage.subtitle": "Choose how you hear and speak"
+  ,"settingsPage.listenSection": "Listen (voice answers)"
+  ,"settingsPage.answerVoice": "Read answers aloud"
+  ,"settingsPage.answerVoiceDescription": "Every answer will be read aloud"
+  ,"settingsPage.speed": "Playback speed"
+  ,"settingsPage.voice": "Voice"
+  ,"settingsPage.maleVoice": "Male voice"
+  ,"settingsPage.highlight": "Highlight words while listening"
+  ,"settingsPage.highlightDescription": "Highlight the spoken text"
+  ,"settingsPage.speakSection": "Speak (voice questions)"
+  ,"settingsPage.preview": "Show preview before sending"
+  ,"settingsPage.previewDescription": "Review what you said first"
+  ,"settingsPage.autoSend": "Send automatically after silence"
+  ,"settingsPage.autoSendDescription": "Send after 2 seconds of silence"
+  ,"settingsPage.accessibility": "Accessibility"
+  ,"settingsPage.largeText": "Large text"
+  ,"settingsPage.largeTextDescription": "Easier to read"
+  ,"settingsPage.vibration": "Vibration"
+  ,"settingsPage.vibrationDescription": "When pressing buttons"
+  ,"settingsPage.testVoice": "Test voice"
+  ,"settingsPage.testVoiceText": "This is a sample public assistant response."
+  ,"settingsPage.systemVoice": "System voice"
+}

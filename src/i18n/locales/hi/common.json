@@ -1,0 +1,168 @@
+{
+  "history": "इतिहास",
+  "settings": "सेटिंग्स",
+  "back": "वापस",
+  "send": "भेजें",
+  "error": "कुछ गलत हो गया। कृपया फिर से प्रयास करें।",
+  "auth.back": "सहायक पर वापस जाएं",
+  "auth.panelTitle": "बेहतर समुदाय के लिए आपकी आवाज़।",
+  "auth.panelDescription": "सरकारी सेवाओं, योजनाओं और स्थानीय विकास के बारे में बातचीत सेव करें और सवाल जारी रखें।",
+  "auth.benefitOne": "अपनी बातचीत कहीं भी देखें",
+  "auth.benefitTwo": "वॉइस और टेक्स्ट चैट जारी रखें",
+  "auth.benefitThree": "अपना खाता और प्राथमिकताएं सुरक्षित रखें",
+  "auth.loginTitle": "वापसी पर स्वागत है",
+  "auth.signupTitle": "अपना खाता बनाएं",
+  "auth.loginDescription": "अपने जन-सहायक के साथ आगे बढ़ने के लिए साइन इन करें।",
+  "auth.signupDescription": "बातचीत सेव करने और कहीं से भी देखने के लिए खाता बनाएं।",
+  "auth.name": "पूरा नाम",
+  "auth.email": "ईमेल पता",
+  "auth.password": "पासवर्ड",
+  "auth.loginButton": "साइन इन करें",
+  "auth.signupButton": "खाता बनाएं",
+  "auth.haveAccount": "क्या आपका पहले से खाता है?",
+  "auth.noAccount": "सहायक के लिए नए हैं?",
+  "auth.loginLink": "साइन इन करें",
+  "auth.signupLink": "खाता बनाएं",
+  "auth.showPassword": "पासवर्ड दिखाएं",
+  "auth.hidePassword": "पासवर्ड छिपाएं",
+  "auth.privacyNote": "आपकी बातचीत सुरक्षित है और साइन इन करने पर ही आपके खाते में सेव होती है।",
+  "auth.genericError": "साइन इन पूरा नहीं हो सका। कृपया फिर कोशिश करें।",
+  "auth.logoutConfirmation": "क्या आप वाकई लॉग आउट करना चाहते हैं?",
+  "auth.logoutTitle": "लॉग आउट करें?",
+  "auth.logout": "लॉग आउट",
+  "auth.cancel": "रद्द करें",
+  "auth.deleteAccountTitle": "खाता हटाएं?",
+  "auth.deleteAccountConfirmation": "क्या आप अपना खाता और सभी सुरक्षित बातचीत हटाना चाहते हैं? इसे वापस नहीं किया जा सकता।",
+  "auth.deleteAccount": "खाता हटाएं",
+  "ok": "ठीक है",
+  "close": "बंद करें",
+  "languageSheet.title": "भाषा चुनें",
+  "languageSheet.subtitle": "आप इसे ऊपर दिए मेनू से कभी भी बदल सकते हैं।",
+
+  "home.greeting": "नमस्ते झाँसी-ललितपुर!",
+  "home.description": "सांसद अनुराग शर्मा जी से जुड़ें, विकास कार्य, समस्या या सरकारी योजना के बारे में सीधे बोलकर पूछें",
+  "home.suggestedQuestions": "सुझाए गए सवाल",
+  "home.showMore": "अगला सवाल",
+  "home.photo": "समस्या फोटो",
+  "home.type": "लिखकर पूछें",
+  "home.photoComingSoonTitle": "जल्द आ रहा है",
+  "home.photoComingSoonMessage": "समस्या की फोटो सुविधा जल्द आ रही है। यहां आप स्थानीय समस्या की फोटो साझा कर सकेंगे।",
+
+  "chat.title": "पूछें",
+  "chat.subtitle": "अपना सवाल पूछें",
+  "chat.placeholder": "अपना सवाल लिखें...",
+  "chat.emptyState": "अपना सवाल लिखें और हम आपकी मदद करेंगे।",
+  "chat.welcomeTitle": "नमस्ते! मैं आपका जन-सहायक हूँ।",
+  "chat.welcomeMessage": "आप मुझसे सरकारी योजनाओं, स्थानीय विकास कार्यों, जनसेवाओं या किसी भी समस्या के बारे में पूछ सकते हैं।",
+  "chat.sent": "भेजा गया",
+  "chat.copy": "उत्तर कॉपी करें",
+  "chat.share": "उत्तर साझा करें",
+  "chat.listen": "उत्तर सुनें",
+  "chat.newConversation": "नई बातचीत शुरू करें",
+  "chat.openVoice": "वॉइस मोड खोलें",
+  "chat.moreOptions": "अन्य विकल्प",
+  "chat.followUpTitle": "आगे का सवाल चुनें",
+  "chat.followUpRoads": "मेरे क्षेत्र में सड़क का कौन सा काम प्रस्तावित है?",
+  "chat.followUpSchemes": "मैं किन सरकारी योजनाओं के लिए आवेदन कर सकता हूँ?",
+  "chat.followUpDocuments": "आवेदन करने के लिए मुझे कौन से दस्तावेज़ चाहिए?",
+  "chat.followUpHealthcare": "मुझे स्वास्थ्य सहायता कहाँ मिल सकती है?",
+  "chat.followUpNextStep": "इस समस्या के लिए मुझे अब क्या करना चाहिए?",
+  "chat.followUpEligibility": "क्या मैं इस सहायता के लिए पात्र हूँ?",
+  "chat.followUpAgriculture": "मैं किसान की किन योजनाओं के लिए आवेदन कर सकता हूँ?",
+  "chat.followUpEducation": "छात्र किन छात्रवृत्तियों के लिए आवेदन कर सकते हैं?",
+  "chat.followUpHousing": "मैं किन आवास योजनाओं के लिए आवेदन कर सकता हूँ?",
+  "chat.followUpEmployment": "मैं कौशल प्रशिक्षण या रोजगार सहायता के लिए कैसे आवेदन कर सकता हूँ?",
+  "historyPage.delete": "हटाएं",
+  "historyPage.deleteTitle": "बातचीत हटाएं?",
+  "historyPage.deleteMessage": "क्या आप यह बातचीत हटाना चाहते हैं? इसे वापस नहीं किया जा सकता।",
+  "chat.source": "स्रोत: सांसद जन-सहायक",
+  "chat.attachPhoto": "फोटो जोड़ें",
+  "chat.useMicrophone": "माइक्रोफ़ोन से पूछें",
+  "chat.voiceUnavailable": "इस ब्राउज़र में आवाज़ से लिखना उपलब्ध नहीं है।",
+  "chat.voiceError": "आपकी आवाज़ सुनाई नहीं दी। कृपया फिर कोशिश करें।",
+  "chat.removePhoto": "फोटो हटाएं",
+  "chat.responseActions": "उत्तर के विकल्प",
+  "chat.changeLanguage": "उत्तर की भाषा बदलें",
+
+  "suggestions.smartCity.title": "डिजिटल इंडिया",
+  "suggestions.smartCity.description": "ऑनलाइन नागरिक सेवाएं......",
+
+  "suggestions.water.title": "सरकारी योजनाएं",
+  "suggestions.water.description": "भारतीय परिवारों के लाभ......",
+
+  "suggestions.corridor.title": "भारतीय संविधान",
+  "suggestions.corridor.description": "अधिकार और नागरिक कर्तव्य.....",
+  "suggestions.health.title": "सार्वजनिक स्वास्थ्य",
+  "suggestions.health.description": "आयुष्मान भारत और अस्पताल......",
+  "suggestions.education.title": "भारतीय शिक्षा",
+  "suggestions.education.description": "छात्रवृत्ति और प्रवेश......",
+  "suggestions.documents.title": "भारतीय चुनाव",
+  "suggestions.documents.description": "मतदान और मतदाता सेवाएं......"
+  ,"voice.history": "पिछली बातें"
+  ,"voice.selectLanguage": "भाषा चुनें"
+  ,"voice.problemPhoto": "समस्या फोटो"
+  ,"voice.askByTyping": "लिखकर पूछें"
+  ,"voice.speakAgain": "फिर से बोलें"
+  ,"voice.listening": "सुन रहा हूँ..."
+  ,"voice.startSpeaking": "बोलना शुरू करें..."
+  ,"voice.listeningHint": "बोलना पूरा होते ही उत्तर अपने आप मिलेगा"
+  ,"voice.transcriptTitle": "मैंने यह सुना"
+  ,"voice.edit": "बदलें"
+  ,"voice.doneEditing": "पूरा हुआ"
+  ,"voice.editing": "अपना सवाल बदलें और फिर भेजें दबाएं"
+  ,"voice.reviewBeforeSend": "अपने सवाल को देखें या बदलने के लिए बदलें दबाएं"
+  ,"voice.autoSend": "2 सेकंड में अपने आप भेजा जाएगा"
+  ,"voice.send": "भेजें"
+  ,"voice.editWithKeyboard": "लिखकर बदलें"
+  ,"voice.thinking": "समझ रहा हूँ..."
+  ,"voice.permissionTitle": "माइक की अनुमति नहीं है"
+  ,"voice.permissionText": "बोलकर पूछने के लिए फोन की सेटिंग में माइक्रोफ़ोन की अनुमति चालू करें।"
+  ,"voice.allowAgain": "फिर से अनुमति दें"
+  ,"voice.noSpeechTitle": "कुछ सुनाई नहीं दिया"
+  ,"voice.noSpeechText": "कोई आवाज़ नहीं मिली। नीचे का बटन दबाकर फिर से बोलें।"
+  ,"voice.answerErrorTitle": "उत्तर नहीं मिल सका"
+  ,"voice.answerErrorText": "आपका सवाल समझ में आ गया, लेकिन उत्तर तैयार नहीं हो सका। कृपया फिर कोशिश करें।"
+  ,"voice.tryAgain": "फिर कोशिश करें"
+  ,"voice.assistantName": "सांसद जन-सहायक AI"
+  ,"voice.leaderName": "सांसद अनुराग शर्मा"
+  ,"voice.answerPlaying": "सांसद जी का उत्तर सुनाया जा रहा है"
+  ,"voice.audioUnavailable": "आपके डिवाइस की आवाज़ का उपयोग हो रहा है"
+  ,"voice.auto": "स्वतः"
+  ,"voice.source": "स्रोत: सांसद कार्यालय · 12 सितम्बर 2026"
+  ,"voice.speed": "सुनने की गति"
+  ,"voice.nextQuestion": "अगला सवाल बोलें या लिखें..."
+  ,"voice.answerHeading": "बबीना ब्लॉक में \"हर घर नल\" योजना का कार्य 80% पूरा हो चुका है।"
+  ,"voice.answerBody": "शेष कार्य अगले माह तक पूरा करने के निर्देश जल निगम को दे दिए गए हैं। सड़क चौड़ीकरण का टेंडर स्वीकृत है, काम नवंबर से शुरू होगा।"
+  ,"historyPage.title": "पिछली बातें"
+  ,"historyPage.subtitle": "{{count}} बातचीत सेव हैं"
+  ,"historyPage.search": "पुरानी बातों में खोजें..."
+  ,"historyPage.clearSearch": "खोज साफ़ करें"
+  ,"historyPage.newChat": "नई बातचीत शुरू करें"
+  ,"historyPage.rename": "बातचीत का नाम बदलें"
+  ,"historyPage.renameTitle": "बातचीत का नाम बदलें"
+  ,"historyPage.cancel": "रद्द करें"
+  ,"historyPage.save": "सेव करें"
+  ,"settingsPage.title": "आवाज़ और सुनना"
+  ,"settingsPage.subtitle": "कैसे सुनें और कैसे बोलें, आप तय करें"
+  ,"settingsPage.listenSection": "सुनना (आवाज़ में उत्तर)"
+  ,"settingsPage.answerVoice": "उत्तर अपने आप सुनाएँ"
+  ,"settingsPage.answerVoiceDescription": "हर जवाब आते ही बोलकर सुनाया जाए"
+  ,"settingsPage.speed": "सुनने की गति"
+  ,"settingsPage.voice": "आवाज़"
+  ,"settingsPage.maleVoice": "पुरुष स्वर"
+  ,"settingsPage.highlight": "सुनते समय शब्द हाइलाइट करें"
+  ,"settingsPage.highlightDescription": "जो बोला जा रहा है वह चमकेगा"
+  ,"settingsPage.speakSection": "बोलना (आवाज़ से सवाल)"
+  ,"settingsPage.preview": "भेजने से पहले दिखाएँ"
+  ,"settingsPage.previewDescription": "आपने क्या बोला, पहले पढ़ लें"
+  ,"settingsPage.autoSend": "चुप होते ही अपने आप भेजें"
+  ,"settingsPage.autoSendDescription": "2 सेकंड शांत रहने पर"
+  ,"settingsPage.accessibility": "सुलभता"
+  ,"settingsPage.largeText": "बड़े अक्षर"
+  ,"settingsPage.largeTextDescription": "पढ़ने में आसानी"
+  ,"settingsPage.vibration": "कंपन (vibration)"
+  ,"settingsPage.vibrationDescription": "बटन दबाने पर"
+  ,"settingsPage.testVoice": "आवाज़ सुनकर देखें"
+  ,"settingsPage.testVoiceText": "यह जन-सहायक के उत्तर की जांच है।"
+  ,"settingsPage.systemVoice": "सिस्टम आवाज़"
+}

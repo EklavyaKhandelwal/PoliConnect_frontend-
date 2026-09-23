@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.text-large {
+  font-size: 112.5%;
+}
