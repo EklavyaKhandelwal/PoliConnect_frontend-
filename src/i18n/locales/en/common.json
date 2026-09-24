@@ -104,6 +104,7 @@
   ,"voice.askByTyping": "Ask by typing"
   ,"voice.speakAgain": "Speak again"
   ,"voice.listening": "Listening..."
+  ,"voice.stopListening": "Stop"
   ,"voice.startSpeaking": "Start speaking..."
   ,"voice.listeningHint": "Your answer will be prepared when you finish speaking"
   ,"voice.transcriptTitle": "I heard this"

@@ -789,7 +789,7 @@ const VoiceAssistant = () => {
             onMic={stopListening}
             onKeyboard={() => navigate(conversationId ? `/chat/${conversationId}` : "/chat")}
             onCancel={cancelListening}
-            micLabel={t("voice.stopListening", "रोकें")}
+            micLabel={t("voice.stopListening")}
           />
         )}
         {state === "transcript" && (
