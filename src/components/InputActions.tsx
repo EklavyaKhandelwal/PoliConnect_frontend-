@@ -1,11 +1,9 @@
 import { FiCamera, FiMic } from "react-icons/fi";
 import { MdKeyboard } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/redux";
 import { clearChat } from "../store/slices/chatSlice";
-import ConfirmationSheet from "./ConfirmationSheet";
-import { useState } from "react";
 
 interface InputActionsProps {
   onMicClick?: () => void;
@@ -14,8 +12,8 @@ interface InputActionsProps {
 const InputActions = ({ onMicClick }: InputActionsProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
-  const [showComingSoon, setShowComingSoon] = useState(false);
 
   return (
     <>
@@ -23,7 +21,7 @@ const InputActions = ({ onMicClick }: InputActionsProps) => {
       {/* Photo */}
       <button
         type="button"
-        onClick={() => setShowComingSoon(true)}
+        onClick={() => navigate("/problem-photo", { state: { from: location.pathname } })}
         aria-label={t("home.photo")}
         className="group flex flex-col items-center gap-2 focus:outline-none"
       >
@@ -76,15 +74,6 @@ const InputActions = ({ onMicClick }: InputActionsProps) => {
         </span>
       </button>
       </div>
-      <ConfirmationSheet
-        open={showComingSoon}
-        title={t("home.photoComingSoonTitle")}
-        message={t("home.photoComingSoonMessage")}
-        confirmLabel={t("ok")}
-        cancelLabel={t("close")}
-        onConfirm={() => setShowComingSoon(false)}
-        onCancel={() => setShowComingSoon(false)}
-      />
     </>
   );
 };

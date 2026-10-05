@@ -6,6 +6,12 @@ import Chat from "../pages/Chat/Chat";
 import History from "../pages/History/History";
 import Settings from "../pages/Settings/Settings";
 import Auth from "../pages/Auth/Auth";
+import ProblemPhoto from "../pages/ProblemPhoto/ProblemPhoto";
+import ComplaintCenter from "../pages/ComplaintCenter/ComplaintCenter";
+import SuggestionThanks from "../pages/SuggestionThanks/SuggestionThanks";
+import MyUpdates from "../pages/SuggestionThanks/MyUpdates";
+import ComplaintTracking from "../pages/ComplaintTracking/ComplaintTracking";
+import ComplaintDetail from "../pages/ComplaintTracking/ComplaintDetail";
 import VoiceAssistant from "../components/VoiceAssistant";
 import { useAppDispatch } from "../hooks/redux";
 import { clearAuth, setUser } from "../store/slices/authSlice";
@@ -43,6 +49,12 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/auth" element={<Auth />} />
         <Route path="/" element={<Home />} />
+        <Route path="/complaint-center" element={<ComplaintCenter />} />
+        <Route path="/my-complaints" element={<ComplaintTracking />} />
+        <Route path="/my-complaints/:complaintId" element={<ComplaintDetail />} />
+        <Route path="/suggestion-thanks" element={<SuggestionThanks />} />
+        <Route path="/my-updates" element={<MyUpdates />} />
+        <Route path="/problem-photo" element={<ProblemPhoto />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:conversationId" element={<Chat />} />
         <Route path="/voice/:conversationId" element={<VoiceAssistant />} />
