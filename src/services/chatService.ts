@@ -85,7 +85,12 @@ export const transcribeVoiceMessage = async (
 ): Promise<string> => {
   const formData = new FormData();
   formData.append("responseLanguage", language);
-  formData.append("file", audio, "voice.webm");
+  const extension = audio.type.includes("ogg")
+    ? "ogg"
+    : audio.type.includes("mp4")
+      ? "mp4"
+      : "webm";
+  formData.append("file", audio, `voice.${extension}`);
 
   const response = await api.post<{ transcript: string }>(
     "/api/v1/message/transcribe",
