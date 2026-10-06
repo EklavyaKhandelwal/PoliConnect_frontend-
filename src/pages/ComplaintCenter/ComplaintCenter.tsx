@@ -91,8 +91,9 @@ const ComplaintCenter = () => {
 
   if (isLoadingComplaints) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-gradient-to-b from-blue-100 via-blue-50 to-white px-6 text-center text-slate-500">
-        <p role="status">{t("complaintTracking.loading")}</p>
+      <main className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-gradient-to-b from-blue-100 via-blue-50 to-white px-6 text-center text-slate-500">
+        <span className="h-9 w-9 animate-spin rounded-full border-4 border-blue-100 border-t-blue-600" aria-hidden="true" />
+        <p role="status" aria-live="polite">{t("complaintTracking.loading")}</p>
       </main>
     );
   }

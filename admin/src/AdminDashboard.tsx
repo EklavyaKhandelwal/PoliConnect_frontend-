@@ -25,8 +25,11 @@ import {
 import leaderImage from "../../src/assets/images/leader.png";
 import { useAdminAuth } from "./adminAuth";
 import AdminSettings from "./AdminSettings";
+import AdminSystemSettings from "./AdminSystemSettings";
+import AdminSelect from "./AdminSelect";
 import AdminComplaints from "./AdminComplaints";
 import AdminSuggestions from "./AdminSuggestions";
+import { defaultAdminConfiguration, type AdminConfiguration, type ComplaintActivityType } from "./adminSettingsTypes";
 
 type Language = "hi" | "en" | "mr";
 type Section = "overview" | "complaints" | "suggestions" | "reports" | "departments" | "templates" | "settings";
@@ -48,7 +51,7 @@ interface AnalyticsData {
   recentActivity: Array<{
     complaintNumber: string;
     category: string;
-    type: string;
+    type: ComplaintActivityType;
     status: string | null;
     message: string | null;
     updatedBy: string | null;
@@ -66,6 +69,14 @@ interface AnalyticsData {
     createdAt: string | null;
   }>;
 }
+
+type ComplaintActivity = AnalyticsData["recentActivity"][number];
+type AdminNotification = ComplaintActivity & { id: string; isRead: boolean };
+
+const notificationId = (activity: ComplaintActivity) =>
+  "id" in activity && typeof activity.id === "string"
+    ? activity.id
+    : `${activity.complaintNumber}:${activity.type}:${activity.createdAt}`;
 
 const analyticsText = {
   en: {
@@ -91,6 +102,17 @@ const analyticsText = {
     trend: "Complaint submissions over time",
     recentComplaints: "Recent complaints",
     recentActivity: "Recent activity",
+    activityFilter: "Complaint",
+    allComplaints: "All complaints",
+    updates: "updates",
+    loadingNotifications: "Loading recent updates…",
+    noNotifications: "No recent complaint updates.",
+    noUnreadNotifications: "You’re all caught up.",
+    notificationError: "Could not load notifications.",
+    markAllRead: "Mark all read",
+    allNotifications: "All",
+    unreadNotifications: "Unread",
+    loadMoreNotifications: "Load older notifications",
     noComplaints: "No complaints were submitted during this date range.",
     noActivity: "No complaint activity in this date range.",
     loading: "Loading live complaint data…",
@@ -140,6 +162,17 @@ const analyticsText = {
     trend: "समय के अनुसार शिकायतें",
     recentComplaints: "हाल की शिकायतें",
     recentActivity: "हाल की गतिविधि",
+    activityFilter: "शिकायत",
+    allComplaints: "सभी शिकायतें",
+    updates: "अपडेट",
+    loadingNotifications: "हाल के अपडेट लोड हो रहे हैं…",
+    noNotifications: "शिकायतों के कोई हालिया अपडेट नहीं हैं।",
+    noUnreadNotifications: "कोई अपठित सूचना नहीं है।",
+    notificationError: "सूचनाएँ लोड नहीं हो सकीं।",
+    markAllRead: "सभी पढ़े हुए चिह्नित करें",
+    allNotifications: "सभी",
+    unreadNotifications: "अपठित",
+    loadMoreNotifications: "पुरानी सूचनाएँ लोड करें",
     noComplaints: "इस तारीख की अवधि में कोई शिकायत दर्ज नहीं हुई।",
     noActivity: "इस तारीख की अवधि में कोई गतिविधि नहीं।",
     loading: "लाइव शिकायत डेटा लोड हो रहा है…",
@@ -189,6 +222,17 @@ const analyticsText = {
     trend: "कालावधीनुसार तक्रारी",
     recentComplaints: "अलीकडील तक्रारी",
     recentActivity: "अलीकडील हालचाली",
+    activityFilter: "तक्रार",
+    allComplaints: "सर्व तक्रारी",
+    updates: "अपडेट",
+    loadingNotifications: "अलीकडील अपडेट लोड होत आहेत…",
+    noNotifications: "तक्रारींचे अलीकडील अपडेट नाहीत.",
+    noUnreadNotifications: "अपठित सूचना नाहीत.",
+    notificationError: "सूचना लोड होऊ शकल्या नाहीत.",
+    markAllRead: "सर्व वाचलेले म्हणून चिन्हांकित करा",
+    allNotifications: "सर्व",
+    unreadNotifications: "न वाचलेले",
+    loadMoreNotifications: "जुन्या सूचना लोड करा",
     noComplaints: "या तारीख श्रेणीत कोणतीही तक्रार दाखल नाही.",
     noActivity: "या तारीख श्रेणीत तक्रारीची हालचाल नाही.",
     loading: "थेट तक्रार डेटा लोड होत आहे…",
@@ -238,6 +282,17 @@ const analyticsText = {
   trend: string;
   recentComplaints: string;
   recentActivity: string;
+  activityFilter: string;
+  allComplaints: string;
+  updates: string;
+  loadingNotifications: string;
+  noNotifications: string;
+  noUnreadNotifications: string;
+  notificationError: string;
+  markAllRead: string;
+  allNotifications: string;
+  unreadNotifications: string;
+  loadMoreNotifications: string;
   noComplaints: string;
   noActivity: string;
   loading: string;
@@ -261,6 +316,7 @@ const translations = {
     departments: "विभाग व अधिकारी",
     templates: "उत्तर के साँचे",
     settings: "सेटिंग",
+    settingsLoadError: "संस्था की सेटिंग लोड नहीं हो सकीं; डिफ़ॉल्ट जानकारी दिखाई जा रही है।",
     today: "आज",
     dashboard: "ओवरव्यू",
     dateSubtitle: "शिकायतों और नागरिक सेवाओं की आज की स्थिति",
@@ -336,6 +392,10 @@ const translations = {
     signIn: "साइन इन करें",
     signingIn: "साइन इन हो रहा है...",
     signOut: "लॉग आउट",
+    signOutConfirmTitle: "लॉग आउट करें?",
+    signOutConfirmMessage: "क्या आप प्रशासक डैशबोर्ड से लॉग आउट करना चाहते हैं?",
+    cancel: "रद्द करें",
+    confirmingSignOut: "लॉग आउट हो रहा है...",
     ownerRole: "मालिक",
     adminRole: "प्रशासक",
     retryConnection: "पुनः प्रयास करें",
@@ -395,6 +455,7 @@ const translations = {
     departments: "Departments & officers",
     templates: "Reply templates",
     settings: "Settings",
+    settingsLoadError: "Organization settings could not be loaded; defaults are being shown.",
     today: "Today",
     dashboard: "Overview",
     dateSubtitle: "Today’s complaint and citizen service snapshot",
@@ -470,6 +531,10 @@ const translations = {
     signIn: "Sign in",
     signingIn: "Signing in...",
     signOut: "Sign out",
+    signOutConfirmTitle: "Sign out?",
+    signOutConfirmMessage: "Are you sure you want to sign out of the admin dashboard?",
+    cancel: "Cancel",
+    confirmingSignOut: "Signing out...",
     ownerRole: "Owner",
     adminRole: "Administrator",
     retryConnection: "Retry connection",
@@ -529,6 +594,7 @@ const translations = {
     departments: "विभाग व अधिकारी",
     templates: "उत्तर नमुने",
     settings: "सेटिंग्ज",
+    settingsLoadError: "संस्थेच्या सेटिंग्ज लोड होऊ शकल्या नाहीत; डीफॉल्ट माहिती दाखवली आहे.",
     today: "आज",
     dashboard: "आढावा",
     dateSubtitle: "आजच्या तक्रारी आणि नागरिक सेवांचा आढावा",
@@ -604,6 +670,10 @@ const translations = {
     signIn: "साइन इन करा",
     signingIn: "साइन इन होत आहे...",
     signOut: "लॉग आउट",
+    signOutConfirmTitle: "लॉग आउट करायचे?",
+    signOutConfirmMessage: "तुम्हाला प्रशासक डॅशबोर्डमधून लॉग आउट करायचे आहे का?",
+    cancel: "रद्द करा",
+    confirmingSignOut: "लॉग आउट होत आहे...",
     ownerRole: "मालक",
     adminRole: "प्रशासक",
     retryConnection: "पुन्हा प्रयत्न करा",
@@ -816,6 +886,7 @@ function AnalyticsView({
   const number = new Intl.NumberFormat(locale);
   const trend = data?.trend ?? [];
   const [activeTrendIndex, setActiveTrendIndex] = useState<number | null>(null);
+  const [activityComplaint, setActivityComplaint] = useState("all");
   const trendMax = Math.max(1, ...trend.map((item) => item.count));
   const chartPoints = trend.map((item, index) => {
     const x = trend.length <= 1 ? 260 : 10 + (index / (trend.length - 1)) * 500;
@@ -827,6 +898,26 @@ function AnalyticsView({
     ? `${trendLine} L${chartPoints[chartPoints.length - 1].split(",")[0]},174 L${chartPoints[0].split(",")[0]},174 Z`
     : "";
   const maxCategoryCount = Math.max(1, ...(data?.categoryBreakdown.map((item) => item.count) ?? []));
+  const recentActivity = data?.recentActivity ?? [];
+  const activityComplaintNumbers = Array.from(new Set(recentActivity.map((activity) => activity.complaintNumber)));
+  const selectedActivityComplaint = activityComplaintNumbers.includes(activityComplaint) ? activityComplaint : "all";
+  const visibleActivity = selectedActivityComplaint === "all"
+    ? recentActivity
+    : recentActivity.filter((activity) => activity.complaintNumber === selectedActivityComplaint);
+  const activityGroups = visibleActivity.reduce<Array<{
+    complaintNumber: string;
+    category: string;
+    activities: typeof recentActivity;
+  }>>((groups, activity) => {
+    const group = groups.find((item) => item.complaintNumber === activity.complaintNumber);
+    if (group) group.activities.push(activity);
+    else groups.push({
+      complaintNumber: activity.complaintNumber,
+      category: activity.category,
+      activities: [activity],
+    });
+    return groups;
+  }, []);
 
   const categoryName = (category: string) => {
     if (category === "education") {
@@ -908,12 +999,18 @@ function AnalyticsView({
   );
 
   return (
-    <div className="dashboard-content analytics-content">
+    <div className="dashboard-content analytics-content" aria-busy={loading}>
       {rangePicker}
       {error && (
         <div className="analytics-error" role="alert">
           <span>{text.loadError} {error}</span>
           <button type="button" onClick={onRetry}>{text.retry}</button>
+        </div>
+      )}
+      {loading && data && (
+        <div className="analytics-refresh-indicator" role="status" aria-live="polite">
+          <span className="page-spinner page-spinner-small" aria-hidden="true" />
+          {text.loading}
         </div>
       )}
       {loading && !data ? (
@@ -1033,20 +1130,47 @@ function AnalyticsView({
             </article>
             <article className="panel analytics-activity-panel">
               <PanelHeading title={text.recentActivity} subtitle={text.dateRange} />
-              {data.recentActivity.length ? (
-                <ul className="analytics-activity-list">
-                  {data.recentActivity.map((activity, index) => (
-                    <li key={`${activity.complaintNumber}-${activity.createdAt}-${index}`}>
-                      <span className="activity-marker" />
-                      <div>
-                        <strong>{activityName(activity.type)}</strong>
-                        <p>{activity.complaintNumber} · {categoryName(activity.category)}</p>
-                        {activity.message && <p className="activity-message">{activity.message}</p>}
-                        <small>{formatActivityTime(activity.createdAt)}{activity.updatedBy ? ` · ${activity.updatedBy}` : ""}</small>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+              {recentActivity.length ? (
+                <>
+                  <label className="activity-filter">
+                    <span>{text.activityFilter}</span>
+                    <AdminSelect
+                      value={selectedActivityComplaint}
+                      onChange={setActivityComplaint}
+                      ariaLabel={text.activityFilter}
+                      className="activity-select"
+                      options={[
+                        { value: "all", label: text.allComplaints },
+                        ...activityComplaintNumbers.map((complaintNumber) => ({
+                          value: complaintNumber,
+                          label: complaintNumber,
+                        })),
+                      ]}
+                    />
+                  </label>
+                  <div className="activity-groups-list">
+                    {activityGroups.map((group) => (
+                      <section className="activity-complaint-group" key={group.complaintNumber}>
+                        <header>
+                          <strong>{group.complaintNumber}</strong>
+                          <span>{categoryName(group.category)} · {group.activities.length} {text.updates}</span>
+                        </header>
+                        <ul className="analytics-activity-list">
+                          {group.activities.map((activity, index) => (
+                            <li key={`${activity.type}-${activity.createdAt}-${index}`}>
+                              <span className="activity-marker" />
+                              <div>
+                                <strong>{activityName(activity.type)}</strong>
+                                {activity.message && <p className="activity-message">{activity.message}</p>}
+                                <small>{formatActivityTime(activity.createdAt)}{activity.updatedBy ? ` · ${activity.updatedBy}` : ""}</small>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    ))}
+                  </div>
+                </>
               ) : <p className="analytics-empty">{text.noActivity}</p>}
             </article>
           </section>
@@ -1063,6 +1187,15 @@ function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notificationActivity, setNotificationActivity] = useState<AdminNotification[]>([]);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
+  const [notificationsError, setNotificationsError] = useState("");
+  const [notificationsRetry, setNotificationsRetry] = useState(0);
+  const [notificationCounts, setNotificationCounts] = useState({ total: 0, unread: 0 });
+  const [notificationFilter, setNotificationFilter] = useState<"all" | "unread">("all");
+  const [notificationCursor, setNotificationCursor] = useState<string | null>(null);
+  const [notificationNextCursor, setNotificationNextCursor] = useState<string | null>(null);
+  const [expandedNotificationComplaint, setExpandedNotificationComplaint] = useState("");
   const [suggestionSearch, setSuggestionSearch] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -1070,11 +1203,18 @@ function AdminDashboard() {
   const [loginBusy, setLoginBusy] = useState(false);
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [logoutBusy, setLogoutBusy] = useState(false);
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const [analyticsRange, setAnalyticsRange] = useState<AnalyticsRange>(() => dateRangeForDays(30));
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
   const [analyticsError, setAnalyticsError] = useState("");
   const [analyticsRetry, setAnalyticsRetry] = useState(0);
+  const [adminConfigurationState, setAdminConfigurationState] = useState<{
+    adminId: string;
+    settings: AdminConfiguration;
+  } | null>(null);
+  const [adminConfigurationError, setAdminConfigurationError] = useState<{ adminId: string; message: string } | null>(null);
+  const [adminConfigurationRetry, setAdminConfigurationRetry] = useState(0);
   const [unreadSuggestionCount, setUnreadSuggestionCount] = useState<number | null>(null);
   const [suggestionCountError, setSuggestionCountError] = useState("");
   const t = translations[language];
@@ -1082,6 +1222,96 @@ function AdminDashboard() {
     setUnreadSuggestionCount(count);
     setSuggestionCountError("");
   }, []);
+  const currentAdminId = auth.admin?.id ?? "";
+  const adminConfiguration = adminConfigurationState?.adminId === currentAdminId
+    ? adminConfigurationState.settings
+    : null;
+  const configurationError = adminConfigurationError?.adminId === currentAdminId
+    ? adminConfigurationError.message
+    : "";
+  const configurationLoading = Boolean(currentAdminId && !adminConfiguration && !configurationError);
+  const notificationPreferences = adminConfiguration?.notifications ?? defaultAdminConfiguration.notifications;
+  const visibleNotificationActivity = notificationActivity.filter((activity) => notificationPreferences[activity.type]);
+  const notificationGroups = Array.from(
+    visibleNotificationActivity.reduce((groups, activity) => {
+      const group = groups.get(activity.complaintNumber) ?? [];
+      group.push(activity);
+      groups.set(activity.complaintNumber, group);
+      return groups;
+    }, new Map<string, AdminNotification[]>()),
+    ([complaintNumber, activities]) => ({ complaintNumber, activities }),
+  );
+  const notificationText = analyticsText[language];
+  const notificationTypeFilter = Object.entries(notificationPreferences)
+    .filter(([, enabled]) => enabled)
+    .map(([type]) => type)
+    .join(",");
+
+  useEffect(() => {
+    if (!auth.admin) return;
+    let active = true;
+    const adminId = auth.admin.id;
+    auth.request<{ settings: AdminConfiguration }>("/settings")
+      .then(({ settings }) => {
+        if (!active) return;
+        setAdminConfigurationState({ adminId, settings });
+        setAdminConfigurationError(null);
+      })
+      .catch((error: unknown) => {
+        if (!active) return;
+        setAdminConfigurationError({
+          adminId,
+          message: error instanceof Error ? error.message : "Could not load admin settings.",
+        });
+      });
+    return () => {
+      active = false;
+    };
+  }, [auth.admin?.id, auth.request, adminConfigurationRetry]);
+
+  useEffect(() => {
+    if (!auth.admin || !notificationsOpen) return;
+    let active = true;
+    const query = new URLSearchParams({
+      filter: notificationFilter,
+      types: notificationTypeFilter,
+      ...(notificationCursor ? { cursor: notificationCursor } : {}),
+    });
+    setNotificationsLoading(true);
+    auth.request<{
+      activities: AdminNotification[];
+      counts: { total: number; unread: number };
+      nextCursor: string | null;
+    }>(`/notifications?${query}`)
+      .then((data) => {
+        if (!active) return;
+        setNotificationActivity((current) => {
+          if (!notificationCursor) return data.activities;
+          const knownIds = new Set(current.map((activity) => activity.id));
+          return [...current, ...data.activities.filter((activity) => !knownIds.has(activity.id))];
+        });
+        setNotificationCounts(data.counts);
+        setNotificationNextCursor(data.nextCursor);
+      })
+      .catch((error: unknown) => {
+        if (active) setNotificationsError(error instanceof Error ? error.message : notificationText.notificationError);
+      })
+      .finally(() => {
+        if (active) setNotificationsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [
+    auth.admin,
+    auth.request,
+    notificationsOpen,
+    notificationsRetry,
+    notificationText.notificationError,
+    notificationFilter,
+    notificationCursor,
+    notificationTypeFilter,
+  ]);
 
   useEffect(() => {
     if (!auth.admin) {
@@ -1144,10 +1374,76 @@ function AdminDashboard() {
     setMenuOpen(false);
   };
 
+  const markNotificationRead = async (activity: AdminNotification) => {
+    if (activity.isRead) return true;
+    if (!currentAdminId) return false;
+    try {
+      await auth.request<{ success: true }>("/notifications/read-state", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: [notificationId(activity)] }),
+      });
+      setNotificationActivity((current) => current
+        .map((item) => item.id === activity.id ? { ...item, isRead: true } : item)
+        .filter((item) => notificationFilter !== "unread" || !item.isRead));
+      setNotificationCounts((current) => ({
+        ...current,
+        unread: Math.max(0, current.unread - 1),
+      }));
+      setNotificationsError("");
+      return true;
+    } catch (error) {
+      setNotificationsError(error instanceof Error ? error.message : notificationText.notificationError);
+      return false;
+    }
+  };
+
+  const markAllNotificationsRead = async () => {
+    if (!currentAdminId || notificationCounts.unread === 0) return;
+    try {
+      await auth.request<{ success: true }>("/notifications/read-state", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ markAll: true }),
+      });
+      setNotificationCounts((current) => ({ ...current, unread: 0 }));
+      if (notificationFilter === "unread") {
+        setNotificationActivity([]);
+        setNotificationNextCursor(null);
+        setNotificationCursor(null);
+      } else {
+        setNotificationActivity((current) => current.map((activity) => ({ ...activity, isRead: true })));
+      }
+      setNotificationsError("");
+    } catch (error) {
+      setNotificationsError(error instanceof Error ? error.message : notificationText.notificationError);
+    }
+  };
+
+  const openComplaintFromNotification = async (activity: AdminNotification) => {
+    if (!await markNotificationRead(activity)) return;
+    setSearch(activity.complaintNumber);
+    selectSection("complaints");
+    setNotificationsOpen(false);
+  };
+
+  const retryAdminConfiguration = () => {
+    setAdminConfigurationError(null);
+    setAdminConfigurationRetry((current) => current + 1);
+  };
+
+  const handleAdminConfigurationSaved = (settings: AdminConfiguration) => {
+    if (!currentAdminId) return;
+    setAdminConfigurationState({ adminId: currentAdminId, settings });
+    setAdminConfigurationError(null);
+  };
+
   const formattedDate = new Intl.DateTimeFormat(
     language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN",
     { weekday: "long", day: "numeric", month: "long", year: "numeric" },
   ).format(new Date());
+  const organizationName = adminConfiguration?.profile.organizationName || t.brand;
+  const officeName = adminConfiguration?.profile.officeName || t.office;
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1168,6 +1464,7 @@ function AdminDashboard() {
     setLoginError("");
     try {
       await auth.logout();
+      setLogoutConfirmOpen(false);
     } catch (error) {
       setLoginError(error instanceof Error ? error.message : "Could not sign out cleanly.");
     } finally {
@@ -1176,7 +1473,14 @@ function AdminDashboard() {
   };
 
   if (auth.loading) {
-    return <main className="auth-screen" lang={language}><p>{t.checkingAccess}</p></main>;
+    return (
+      <main className="auth-screen" lang={language}>
+        <div className="page-loading" role="status" aria-live="polite">
+          <span className="page-spinner" aria-hidden="true" />
+          <span>{t.checkingAccess}</span>
+        </div>
+      </main>
+    );
   }
 
   if (!auth.admin) {
@@ -1280,8 +1584,8 @@ function AdminDashboard() {
         <div className="brand">
           <span className="brand-mark"><FiClipboard size={23} /></span>
           <span className="brand-copy">
-            <strong>{t.brand}</strong>
-            <small>{t.office}</small>
+            <strong>{organizationName}</strong>
+            <small>{officeName}</small>
           </span>
           <button className="icon-button sidebar-close" aria-label="Close navigation" onClick={() => setMenuOpen(false)}><FiX /></button>
         </div>
@@ -1307,11 +1611,51 @@ function AdminDashboard() {
         <div className="profile-card">
           <span className="avatar">{(auth.admin.name || auth.admin.email).trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toLocaleUpperCase()}</span>
           <span className="profile-copy"><strong>{auth.admin.name || auth.admin.email}</strong><small>{auth.admin.role === "owner" ? t.ownerRole : t.adminRole}</small></span>
-          <button type="button" className="sign-out-button" onClick={() => void handleLogout()} disabled={logoutBusy} aria-label={t.signOut} title={t.signOut}>
+          <button type="button" className="sign-out-button" onClick={() => setLogoutConfirmOpen(true)} disabled={logoutBusy} aria-label={t.signOut} title={t.signOut}>
             <FiLogOut size={16} />
           </button>
         </div>
       </aside>
+
+      {logoutConfirmOpen && (
+        <div
+          className="logout-confirm-backdrop"
+          onClick={(event) => {
+            if (event.target === event.currentTarget && !logoutBusy) setLogoutConfirmOpen(false);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && !logoutBusy) setLogoutConfirmOpen(false);
+          }}
+        >
+          <section
+            className="logout-confirm-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-confirm-title"
+            aria-describedby="logout-confirm-message"
+          >
+            <span className="logout-confirm-icon"><FiLogOut size={19} /></span>
+            <h2 id="logout-confirm-title">{t.signOutConfirmTitle}</h2>
+            <p id="logout-confirm-message">{t.signOutConfirmMessage}</p>
+            {loginError && <p className="logout-confirm-error" role="alert">{loginError}</p>}
+            <div className="logout-confirm-actions">
+              <button
+                type="button"
+                className="logout-confirm-cancel"
+                onClick={() => setLogoutConfirmOpen(false)}
+                disabled={logoutBusy}
+                autoFocus
+              >{t.cancel}</button>
+              <button
+                type="button"
+                className="logout-confirm-submit"
+                onClick={() => void handleLogout()}
+                disabled={logoutBusy}
+              >{logoutBusy ? <><span className="auth-spinner" />{t.confirmingSignOut}</> : t.signOut}</button>
+            </div>
+          </section>
+        </div>
+      )}
 
       {menuOpen && <button className="sidebar-backdrop" aria-label="Close navigation" onClick={() => setMenuOpen(false)} />}
 
@@ -1348,15 +1692,163 @@ function AdminDashboard() {
             <button
               type="button"
               className={`icon-button notification-button ${notificationsOpen ? "icon-button-selected" : ""}`}
-              aria-label={t.notifications}
+              aria-label={notificationCounts.unread ? `${t.notifications} (${notificationCounts.unread})` : t.notifications}
               aria-expanded={notificationsOpen}
-              onClick={() => setNotificationsOpen((open) => !open)}
+              onClick={() => {
+                const open = !notificationsOpen;
+                if (open) {
+                  setNotificationActivity([]);
+                  setNotificationCounts({ total: 0, unread: 0 });
+                  setNotificationCursor(null);
+                  setNotificationNextCursor(null);
+                  setNotificationsLoading(true);
+                  setNotificationsError("");
+                }
+                setNotificationsOpen(open);
+              }}
             >
               <FiBell size={19} />
+              {notificationCounts.unread > 0 && <span className="notification-dot" aria-hidden="true" />}
             </button>
-            {notificationsOpen && <div className="notification-popover"><strong>{t.notifications}</strong><p>{t.navComing}</p></div>}
+            {notificationsOpen && (
+              <section className="notification-popover" aria-label={t.notifications}>
+                <header>
+                  <strong>{t.notifications}</strong>
+                  <button
+                    type="button"
+                    onClick={() => void markAllNotificationsRead()}
+                    disabled={notificationCounts.unread === 0}
+                  >{notificationText.markAllRead} ({notificationCounts.unread})</button>
+                </header>
+                <div className="notification-tabs" role="tablist" aria-label={t.notifications}>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={notificationFilter === "all"}
+                    className={notificationFilter === "all" ? "notification-tab-active" : ""}
+                    onClick={() => {
+                      setNotificationFilter("all");
+                      setNotificationCursor(null);
+                      setNotificationNextCursor(null);
+                      setNotificationActivity([]);
+                      setExpandedNotificationComplaint("");
+                      setNotificationsError("");
+                    }}
+                  >{notificationText.allNotifications}<span>{notificationCounts.total}</span></button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={notificationFilter === "unread"}
+                    className={notificationFilter === "unread" ? "notification-tab-active" : ""}
+                    onClick={() => {
+                      setNotificationFilter("unread");
+                      setNotificationCursor(null);
+                      setNotificationNextCursor(null);
+                      setNotificationActivity([]);
+                      setExpandedNotificationComplaint("");
+                      setNotificationsError("");
+                    }}
+                  >{notificationText.unreadNotifications}<span>{notificationCounts.unread}</span></button>
+                </div>
+                {notificationsError ? (
+                  <div className="notification-state" role="alert">
+                    <p>{notificationsError || notificationText.notificationError}</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNotificationCursor(null);
+                        setNotificationActivity([]);
+                        setNotificationsLoading(true);
+                        setNotificationsError("");
+                        setNotificationsRetry((value) => value + 1);
+                      }}
+                    >{notificationText.retry}</button>
+                  </div>
+                ) : notificationsLoading && notificationGroups.length === 0 ? (
+                  <div className="notification-state" role="status">
+                    <span className="page-spinner page-spinner-small" aria-hidden="true" />
+                    <p>{notificationText.loadingNotifications}</p>
+                  </div>
+                ) : notificationGroups.length === 0 ? (
+                  <p className="notification-state">
+                    {notificationFilter === "unread" ? notificationText.noUnreadNotifications : notificationText.noNotifications}
+                  </p>
+                ) : (
+                  <>
+                    <ul className="notification-list">
+                    {notificationGroups.map(({ complaintNumber, activities }) => {
+                      const latestActivity = activities[0];
+                      const unreadCount = activities.filter((activity) => !activity.isRead).length;
+                      const isExpanded = expandedNotificationComplaint === complaintNumber;
+                      return (
+                        <li key={complaintNumber} className={`notification-group ${unreadCount ? "notification-group-unread" : ""}`}>
+                          <button
+                            type="button"
+                            className="notification-group-toggle"
+                            aria-expanded={isExpanded}
+                            onClick={() => setExpandedNotificationComplaint(isExpanded ? "" : complaintNumber)}
+                          >
+                            <span className="notification-group-copy">
+                              <strong>{complaintNumber} · {t[latestActivity.category as keyof typeof t] ?? latestActivity.category}</strong>
+                              <small>
+                                {notificationText.events[latestActivity.type] ?? latestActivity.type}
+                                {" · "}{activities.length} {notificationText.updates}
+                              </small>
+                            </span>
+                            <span className="notification-group-indicators">
+                              {unreadCount > 0 && <span className="notification-unread-count">{unreadCount}</span>}
+                              <FiChevronDown aria-hidden="true" />
+                            </span>
+                          </button>
+                          {isExpanded && (
+                            <ul className="notification-event-list">
+                              {activities.map((activity) => {
+                                const eventLabel = notificationText.events[activity.type] ?? activity.type;
+                                const locale = language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
+                                const time = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(activity.createdAt));
+                                return (
+                                  <li key={activity.id}>
+                                    <button
+                                      type="button"
+                                      className={`notification-event ${activity.isRead ? "" : "notification-event-unread"}`}
+                                      onClick={() => void openComplaintFromNotification(activity)}
+                                    >
+                                      <span><strong>{eventLabel}</strong>{!activity.isRead && <i aria-hidden="true" />}</span>
+                                      <small>{time}{activity.updatedBy ? ` · ${activity.updatedBy}` : ""}</small>
+                                    </button>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </li>
+                      );
+                    })}
+                    </ul>
+                    {notificationNextCursor && (
+                      <button
+                        type="button"
+                        className="notification-load-more"
+                        disabled={notificationsLoading}
+                        onClick={() => setNotificationCursor(notificationNextCursor)}
+                      >
+                        {notificationsLoading && <span className="page-spinner page-spinner-small" aria-hidden="true" />}
+                        {notificationText.loadMoreNotifications}
+                      </button>
+                    )}
+                  </>
+                )}
+              </section>
+            )}
           </div>
         </header>
+
+        {configurationError && (
+          <div className="settings-error-block admin-configuration-warning" role="alert">
+            <p>{t.settingsLoadError} {configurationError}</p>
+            <button type="button" onClick={retryAdminConfiguration}>{t.retryConnection}</button>
+          </div>
+        )}
 
         {activeSection === "overview" ? (
           <AnalyticsView
@@ -1390,6 +1882,15 @@ function AdminDashboard() {
           />
         ) : activeSection === "complaints" ? (
           <AdminComplaints language={language} search={search} onSearch={setSearch} />
+        ) : activeSection === "settings" ? (
+          <AdminSystemSettings
+            language={language}
+            settings={adminConfiguration}
+            loading={configurationLoading}
+            error={configurationError}
+            onRetry={retryAdminConfiguration}
+            onSaved={handleAdminConfigurationSaved}
+          />
         ) : activeSection === "departments" || activeSection === "templates" ? (
           <AdminSettings
             key={activeSection}
@@ -1404,7 +1905,7 @@ function AdminDashboard() {
             <button type="button" className="primary-button" onClick={() => selectSection("overview")}>{t.dashboard}</button>
           </section>
         )}
-        <footer className="static-note">{t.brand} · {language === "en" ? "Live complaint and citizen input records" : language === "mr" ? "थेट तक्रार आणि नागरिक संदेश नोंदी" : "लाइव शिकायत और नागरिक संदेश रिकॉर्ड"}</footer>
+        <footer className="static-note">{organizationName} · {language === "en" ? "Live complaint and citizen input records" : language === "mr" ? "थेट तक्रार आणि नागरिक संदेश नोंदी" : "लाइव शिकायत और नागरिक संदेश रिकॉर्ड"}</footer>
       </section>
     </main>
   );

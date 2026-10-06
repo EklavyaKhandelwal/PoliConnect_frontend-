@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FiArrowLeft, FiCheck, FiMessageCircle, FiRefreshCw, FiStar } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { usePullToRefresh } from "../../hooks/usePullToRefresh";
 import { getComplaints, type ComplaintRecord } from "../../services/complaints";
 import { getMySuggestions, type SuggestionRecord } from "../../services/suggestions";
 
@@ -42,9 +43,27 @@ const MyUpdates = () => {
     .filter((complaint) => complaint.citizenFeedback)
     .map((complaint) => ({ complaint, feedback: complaint.citizenFeedback! }));
   const hasUpdates = suggestions.length > 0 || complaintFeedback.length > 0;
+  const pullToRefresh = usePullToRefresh(() => loadUpdates(), loading);
 
   return (
-    <main className="min-h-dvh bg-gradient-to-b from-blue-100 via-blue-50 to-white text-slate-900">
+    <main
+      className="min-h-dvh bg-gradient-to-b from-blue-100 via-blue-50 to-white text-slate-900"
+      onTouchStart={pullToRefresh.onTouchStart}
+      onTouchMove={pullToRefresh.onTouchMove}
+      onTouchEnd={pullToRefresh.onTouchEnd}
+      onTouchCancel={pullToRefresh.onTouchCancel}
+    >
+      {(pullToRefresh.pullDistance > 0 || pullToRefresh.refreshing) && (
+        <div
+          className="fixed left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-blue-700 shadow-lg"
+          role="status"
+          aria-live="polite"
+          style={{ top: `${Math.max(12, pullToRefresh.pullDistance)}px` }}
+        >
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-blue-100 border-t-blue-600" />
+          {pullToRefresh.refreshing ? t("citizenUpdates.loading") : t("complaintTracking.refresh")}
+        </div>
+      )}
       <header className="border-b border-blue-100 bg-white px-4 py-3 sm:px-6">
         <div className="mx-auto flex w-full max-w-2xl items-center gap-3">
           <button
@@ -80,7 +99,10 @@ const MyUpdates = () => {
           </div>
         )}
         {loading && !hasUpdates ? (
-          <p role="status" className="py-8 text-center text-sm text-slate-500">{t("citizenUpdates.loading")}</p>
+          <div role="status" aria-live="polite" className="flex flex-col items-center gap-3 py-10 text-center text-sm text-slate-500">
+            <span className="h-9 w-9 animate-spin rounded-full border-4 border-blue-100 border-t-blue-600" />
+            <span>{t("citizenUpdates.loading")}</span>
+          </div>
         ) : !hasUpdates && !error ? (
           <article className="rounded-3xl bg-white p-6 text-center shadow-[0_5px_16px_rgba(44,79,125,0.10)]">
             <FiMessageCircle className="mx-auto text-blue-600" size={28} />

@@ -477,7 +477,7 @@ export default function AdminSettings({
         {error && <div className="settings-error-block" role="alert"><p>{error}</p><button type="button" onClick={() => void loadData()}>{text.retry}</button></div>}
         {formOpen && <div className="settings-form-card"><h3>{editingId ? text.edit : addLabel}</h3>{renderForm()}</div>}
         {loading ? (
-          <div className="settings-loading"><FiRefreshCw className="settings-spinning" />{text.loading}</div>
+          <div className="settings-loading"><span className="page-spinner page-spinner-small" aria-hidden="true" />{text.loading}</div>
         ) : !error && records.length === 0 ? (
           <div className="settings-empty"><span><FiPlus size={19} /></span><p>{emptyLabel}</p></div>
         ) : !error ? (
