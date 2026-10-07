@@ -17,6 +17,19 @@
   "auth.name": "पूरा नाम",
   "auth.email": "ईमेल पता",
   "auth.password": "पासवर्ड",
+  "auth.forgotPassword": "पासवर्ड भूल गए?",
+  "auth.recoveryTitle": "पासवर्ड रीसेट करें",
+  "auth.recoveryDescription": "यदि इस ईमेल से खाता जुड़ा है, तो हम एक बार उपयोग होने वाला कोड भेजेंगे।",
+  "auth.backToLogin": "साइन इन पर वापस जाएँ",
+  "auth.recoveryCode": "ईमेल का 6 अंकों का कोड",
+  "auth.resendCode": "नया कोड भेजें",
+  "auth.resendCodeCountdown": "{{seconds}} सेकंड में नया कोड भेजें",
+  "auth.newPassword": "नया पासवर्ड (कम से कम 12 अक्षर)",
+  "auth.sendRecoveryCode": "रीसेट कोड भेजें",
+  "auth.resetPasswordButton": "पासवर्ड रीसेट करें",
+  "auth.recoveryRequested": "यदि इस ईमेल से खाता जुड़ा है, तो कोड जल्द भेजा जाएगा।",
+  "auth.passwordResetSuccess": "पासवर्ड अपडेट हो गया है। कृपया साइन इन करें।",
+  "auth.recoveryError": "पासवर्ड रीसेट नहीं हो सका। विवरण जाँचकर फिर कोशिश करें।",
   "auth.loginButton": "साइन इन करें",
   "auth.signupButton": "खाता बनाएं",
   "auth.haveAccount": "क्या आपका पहले से खाता है?",
@@ -36,6 +49,28 @@
   "auth.deleteAccount": "खाता हटाएं",
   "ok": "ठीक है",
   "close": "बंद करें",
+  "notifications.title": "सूचनाएँ",
+  "notifications.subtitle": "{{count}} अपठित",
+  "notifications.unreadLabel": "{{count}} अपठित सूचनाएँ",
+  "notifications.filters": "सूचना फ़िल्टर",
+  "notifications.filter.all": "सभी",
+  "notifications.filter.unread": "अपठित",
+  "notifications.unread": "अपठित",
+  "notifications.markAllRead": "सभी को पढ़ा हुआ करें",
+  "notifications.refresh": "सूचनाएँ रीफ़्रेश करें",
+  "notifications.loading": "सूचनाएँ लोड हो रही हैं…",
+  "notifications.loadMore": "और लोड करें",
+  "notifications.loadError": "सूचनाएँ लोड नहीं हो सकीं।",
+  "notifications.readError": "सूचना की स्थिति अपडेट नहीं हो सकी।",
+  "notifications.retry": "फिर कोशिश करें",
+  "notifications.emptyTitle": "आपने सभी सूचनाएँ देख ली हैं",
+  "notifications.emptyDescription": "शिकायत के संदेश और अपडेट यहाँ दिखेंगे।",
+  "notifications.events.registered": "शिकायत प्राप्त हुई",
+  "notifications.events.assigned": "शिकायत विभाग को सौंपी गई",
+  "notifications.events.status_changed": "शिकायत की स्थिति अपडेट हुई",
+  "notifications.events.resolved": "शिकायत हल चिह्नित हुई",
+  "notifications.events.rejected": "शिकायत अस्वीकृत हुई",
+  "notifications.events.message": "प्रशासन का नया संदेश",
   "languageSheet.title": "भाषा चुनें",
   "languageSheet.subtitle": "आप इसे ऊपर दिए मेनू से कभी भी बदल सकते हैं।",
 
@@ -510,6 +545,9 @@
   ,"settingsPage.title": "आवाज़ और सुनना"
   ,"settingsPage.subtitle": "कैसे सुनें और कैसे बोलें, आप तय करें"
   ,"settingsPage.listenSection": "सुनना (आवाज़ में उत्तर)"
+  ,"settingsPage.notificationsSection": "सूचनाएँ"
+  ,"settingsPage.notificationSound": "सूचना की आवाज़"
+  ,"settingsPage.notificationSoundDescription": "ऐप खुला होने पर नए अपडेट के लिए छोटी आवाज़ चलाएँ"
   ,"settingsPage.answerVoice": "उत्तर अपने आप सुनाएँ"
   ,"settingsPage.answerVoiceDescription": "हर जवाब आते ही बोलकर सुनाया जाए"
   ,"settingsPage.speed": "सुनने की गति"

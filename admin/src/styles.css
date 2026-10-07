@@ -55,10 +55,12 @@ button { cursor: pointer; }
 .auth-input-wrap > svg:first-child { position: absolute; left: 15px; z-index: 1; width: 17px; height: 17px; }
 .auth-form input { width: 100%; height: 51px; padding: 0 44px; border: 1px solid #e0e6ef; border-radius: 15px; outline: none; color: #253149; background: #f8fafd; font-size: 13px; transition: border-color .18s, background .18s, box-shadow .18s; }
 .auth-form input:focus { border-color: #5080f5; background: #fff; box-shadow: 0 0 0 4px #3c72f51c; }
+.auth-form input.admin-recovery-code { padding-left: 15px; letter-spacing: .35em; text-align: center; }
 .auth-password-toggle { position: absolute; right: 8px; display: grid; width: 36px; height: 36px; place-items: center; border: 0; border-radius: 50%; color: #7d899b; background: transparent; }
 .auth-password-toggle:hover { color: #326af1; background: #edf3ff; }
 .auth-error { margin: 0; padding: 11px 13px; border: 1px solid #fee0dc; border-radius: 12px; color: #b42318; background: #fff5f3; font-size: 12px; line-height: 1.5; }
 .auth-retry { justify-self: start; padding: 0; border: 0; color: #326af1; background: transparent; font-size: 12px; font-weight: 700; }
+.auth-forgot-link { justify-self: center; margin-top: 14px; }
 .auth-submit { display: flex; align-items: center; justify-content: center; gap: 9px; height: 51px; margin-top: 3px; border: 0; border-radius: 15px; color: #fff; background: #356bea; box-shadow: 0 8px 18px #326af12b; font-size: 13px; font-weight: 800; transition: background .18s, transform .18s, box-shadow .18s; }
 .auth-submit:hover:not(:disabled) { transform: translateY(-1px); background: #285fe0; box-shadow: 0 11px 22px #326af13d; }
 .auth-submit:disabled { cursor: wait; opacity: .72; }

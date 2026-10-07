@@ -17,6 +17,19 @@
   "auth.name": "पूर्ण नाव",
   "auth.email": "ईमेल पत्ता",
   "auth.password": "पासवर्ड",
+  "auth.forgotPassword": "पासवर्ड विसरलात?",
+  "auth.recoveryTitle": "पासवर्ड रीसेट करा",
+  "auth.recoveryDescription": "या ईमेलशी खाते जोडलेले असल्यास, आम्ही एकदाच वापरता येणारा कोड पाठवू.",
+  "auth.backToLogin": "साइन इनकडे परत",
+  "auth.recoveryCode": "ईमेलवरील ६ अंकी कोड",
+  "auth.resendCode": "नवीन कोड पाठवा",
+  "auth.resendCodeCountdown": "{{seconds}} सेकंदात नवीन कोड पाठवा",
+  "auth.newPassword": "नवीन पासवर्ड (किमान १२ अक्षरे)",
+  "auth.sendRecoveryCode": "रीसेट कोड पाठवा",
+  "auth.resetPasswordButton": "पासवर्ड रीसेट करा",
+  "auth.recoveryRequested": "या ईमेलशी खाते जोडलेले असल्यास, कोड लवकरच पाठवला जाईल.",
+  "auth.passwordResetSuccess": "पासवर्ड अपडेट झाला. कृपया साइन इन करा.",
+  "auth.recoveryError": "पासवर्ड रीसेट होऊ शकला नाही. तपशील तपासून पुन्हा प्रयत्न करा.",
   "auth.loginButton": "साइन इन करा",
   "auth.signupButton": "खाते तयार करा",
   "auth.haveAccount": "आधीच खाते आहे?",
@@ -36,6 +49,28 @@
   "auth.deleteAccount": "खाते हटवा",
   "ok": "ठीक आहे",
   "close": "बंद करा",
+  "notifications.title": "सूचना",
+  "notifications.subtitle": "{{count}} न वाचलेले",
+  "notifications.unreadLabel": "{{count}} न वाचलेल्या सूचना",
+  "notifications.filters": "सूचना फिल्टर",
+  "notifications.filter.all": "सर्व",
+  "notifications.filter.unread": "न वाचलेले",
+  "notifications.unread": "न वाचलेले",
+  "notifications.markAllRead": "सर्व वाचलेले म्हणून चिन्हांकित करा",
+  "notifications.refresh": "सूचना रिफ्रेश करा",
+  "notifications.loading": "सूचना लोड होत आहेत…",
+  "notifications.loadMore": "अधिक लोड करा",
+  "notifications.loadError": "सूचना लोड होऊ शकल्या नाहीत.",
+  "notifications.readError": "सूचनेची स्थिती अपडेट होऊ शकली नाही.",
+  "notifications.retry": "पुन्हा प्रयत्न करा",
+  "notifications.emptyTitle": "सर्व अपडेट पाहिले आहेत",
+  "notifications.emptyDescription": "तक्रारीचे संदेश आणि अपडेट येथे दिसतील.",
+  "notifications.events.registered": "तक्रार प्राप्त झाली",
+  "notifications.events.assigned": "तक्रार विभागाकडे सोपवली",
+  "notifications.events.status_changed": "तक्रारीची स्थिती अपडेट झाली",
+  "notifications.events.resolved": "तक्रार निकाली म्हणून चिन्हांकित",
+  "notifications.events.rejected": "तक्रार नामंजूर",
+  "notifications.events.message": "प्रशासनाचा नवीन संदेश",
   "languageSheet.title": "भाषा निवडा",
   "languageSheet.subtitle": "तुम्ही हे वरच्या मेनूमधून कधीही बदलू शकता.",
 
@@ -510,6 +545,9 @@
   ,"settingsPage.title": "आवाज आणि ऐकणे"
   ,"settingsPage.subtitle": "कसे ऐकायचे आणि कसे बोलायचे ते ठरवा"
   ,"settingsPage.listenSection": "ऐकणे (आवाजातील उत्तरे)"
+  ,"settingsPage.notificationsSection": "सूचना"
+  ,"settingsPage.notificationSound": "सूचनेचा आवाज"
+  ,"settingsPage.notificationSoundDescription": "अॅप उघडे असताना नवीन अपडेटसाठी छोटा आवाज वाजवा"
   ,"settingsPage.answerVoice": "उत्तरे मोठ्याने ऐकवा"
   ,"settingsPage.answerVoiceDescription": "प्रत्येक उत्तर मोठ्याने ऐकवले जाईल"
   ,"settingsPage.speed": "ऐकण्याचा वेग"

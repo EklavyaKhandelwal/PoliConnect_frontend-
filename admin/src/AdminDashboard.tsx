@@ -29,6 +29,7 @@ import AdminSystemSettings from "./AdminSystemSettings";
 import AdminSelect from "./AdminSelect";
 import AdminComplaints from "./AdminComplaints";
 import AdminSuggestions from "./AdminSuggestions";
+import AdminPasswordRecovery from "./AdminPasswordRecovery";
 import { defaultAdminConfiguration, type AdminConfiguration, type ComplaintActivityType } from "./adminSettingsTypes";
 
 type Language = "hi" | "en" | "mr";
@@ -388,6 +389,19 @@ const translations = {
     passwordVisibility: "पासवर्ड दिखाएँ",
     hidePassword: "पासवर्ड छिपाएँ",
     emailAddress: "ईमेल",
+    forgotPassword: "पासवर्ड भूल गए?",
+    recoveryTitle: "पासवर्ड रीसेट करें",
+    recoveryDescription: "यदि ईमेल से प्रशासक खाता जुड़ा है, तो हम एक बार उपयोग होने वाला कोड भेजेंगे।",
+    backToSignIn: "साइन इन पर वापस जाएँ",
+    recoveryCode: "ईमेल का 6 अंकों का कोड",
+    resendCode: "नया कोड भेजें",
+    resendCodeCountdown: "{{seconds}} सेकंड में नया कोड भेजें",
+    newPassword: "नया पासवर्ड (कम से कम 12 अक्षर)",
+    sendRecoveryCode: "रीसेट कोड भेजें",
+    resetPassword: "पासवर्ड रीसेट करें",
+    recoveryRequested: "यदि इस ईमेल से प्रशासक खाता जुड़ा है, तो कोड जल्द भेजा जाएगा।",
+    passwordResetSuccess: "पासवर्ड अपडेट हो गया है। कृपया साइन इन करें।",
+    recoveryError: "पासवर्ड रीसेट नहीं हो सका। कृपया फिर कोशिश करें।",
     password: "पासवर्ड",
     signIn: "साइन इन करें",
     signingIn: "साइन इन हो रहा है...",
@@ -527,6 +541,19 @@ const translations = {
     passwordVisibility: "Show password",
     hidePassword: "Hide password",
     emailAddress: "Email",
+    forgotPassword: "Forgot password?",
+    recoveryTitle: "Reset your password",
+    recoveryDescription: "We’ll email a one-time code if an administrator account is registered with that address.",
+    backToSignIn: "Back to sign in",
+    recoveryCode: "6-digit email code",
+    resendCode: "Send a new code",
+    resendCodeCountdown: "Send a new code in {{seconds}}s",
+    newPassword: "New password (at least 12 characters)",
+    sendRecoveryCode: "Send recovery code",
+    resetPassword: "Reset password",
+    recoveryRequested: "If an administrator account matches that email, a code will be delivered shortly.",
+    passwordResetSuccess: "Your password has been updated. Please sign in.",
+    recoveryError: "Could not complete password recovery. Please try again.",
     password: "Password",
     signIn: "Sign in",
     signingIn: "Signing in...",
@@ -666,6 +693,19 @@ const translations = {
     passwordVisibility: "पासवर्ड दाखवा",
     hidePassword: "पासवर्ड लपवा",
     emailAddress: "ईमेल",
+    forgotPassword: "पासवर्ड विसरलात?",
+    recoveryTitle: "पासवर्ड रीसेट करा",
+    recoveryDescription: "या ईमेलशी प्रशासक खाते जोडलेले असल्यास, आम्ही एकदाच वापरता येणारा कोड पाठवू.",
+    backToSignIn: "साइन इनकडे परत",
+    recoveryCode: "ईमेलवरील ६ अंकी कोड",
+    resendCode: "नवीन कोड पाठवा",
+    resendCodeCountdown: "{{seconds}} सेकंदात नवीन कोड पाठवा",
+    newPassword: "नवीन पासवर्ड (किमान १२ अक्षरे)",
+    sendRecoveryCode: "रीसेट कोड पाठवा",
+    resetPassword: "पासवर्ड रीसेट करा",
+    recoveryRequested: "या ईमेलशी प्रशासक खाते जोडलेले असल्यास, कोड लवकरच पाठवला जाईल.",
+    passwordResetSuccess: "पासवर्ड अपडेट झाला. कृपया साइन इन करा.",
+    recoveryError: "पासवर्ड रीसेट होऊ शकला नाही. कृपया पुन्हा प्रयत्न करा.",
     password: "पासवर्ड",
     signIn: "साइन इन करा",
     signingIn: "साइन इन होत आहे...",
@@ -1201,6 +1241,7 @@ function AdminDashboard() {
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loginBusy, setLoginBusy] = useState(false);
+  const [showPasswordRecovery, setShowPasswordRecovery] = useState(false);
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [logoutBusy, setLogoutBusy] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
@@ -1524,9 +1565,19 @@ function AdminDashboard() {
               <div className="auth-form-heading">
                 <span className="auth-heading-mark"><FiLock size={19} /></span>
                 <p>{t.secureAdminAccess}</p>
-                <h1>{t.adminLoginTitle}</h1>
-                <p className="auth-description">{t.adminLoginDescription}</p>
+                <h1>{showPasswordRecovery ? t.recoveryTitle : t.adminLoginTitle}</h1>
+                <p className="auth-description">{showPasswordRecovery ? t.recoveryDescription : t.adminLoginDescription}</p>
               </div>
+              {showPasswordRecovery ? (
+                <AdminPasswordRecovery
+                  initialEmail={loginEmail}
+                  text={t}
+                  onBack={() => {
+                    setShowPasswordRecovery(false);
+                    setLoginError("");
+                  }}
+                />
+              ) : <>
               <form className="auth-form" onSubmit={handleLogin}>
                 <label>{t.emailAddress}
                   <span className="auth-input-wrap">
@@ -1570,6 +1621,15 @@ function AdminDashboard() {
                   {loginBusy ? <><span className="auth-spinner" />{t.signingIn}</> : <>{t.signIn}<FiChevronRight size={18} /></>}
                 </button>
               </form>
+              <button
+                className="auth-retry auth-forgot-link"
+                type="button"
+                onClick={() => {
+                  setLoginError("");
+                  setShowPasswordRecovery(true);
+                }}
+              >{t.forgotPassword}</button>
+              </>}
               <p className="auth-security-note"><FiLock size={13} />{t.secureAdminAccess}</p>
             </div>
           </section>

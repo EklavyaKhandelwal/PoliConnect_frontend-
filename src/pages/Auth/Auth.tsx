@@ -8,12 +8,14 @@ import { useAppDispatch } from "../../hooks/redux";
 import { setCredentials } from "../../store/slices/authSlice";
 import { signIn, signUp } from "../../services/authService";
 import axios from "axios";
+import PasswordRecovery from "./PasswordRecovery";
 
 const Auth = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation("common");
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isRecoveringPassword, setIsRecoveringPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -122,7 +124,7 @@ const Auth = () => {
               <img src={leaderImage} alt="" className="w-24 shrink-0 opacity-90 sm:w-32" />
             </div>
           </div>
-          <div className="mb-8">
+          {!isRecoveringPassword && <div className="mb-8">
             <div className="mb-5 hidden items-center gap-3 lg:flex">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-sm font-black text-white">AS</span>
               <span className="text-sm font-bold text-blue-700">{t("voice.assistantName")}</span>
@@ -133,9 +135,17 @@ const Auth = () => {
             <p className="mt-3 max-w-md text-sm leading-6 text-slate-500 sm:text-base">
               {isSignUp ? t("auth.signupDescription") : t("auth.loginDescription")}
             </p>
-          </div>
+          </div>}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          {isRecoveringPassword ? (
+            <PasswordRecovery
+              initialEmail={email}
+              onBack={() => {
+                setError("");
+                setIsRecoveringPassword(false);
+              }}
+            />
+          ) : <form onSubmit={handleSubmit} className="space-y-5">
             {isSignUp && (
               <label className="block text-sm font-semibold text-slate-700">
                 {t("auth.name")}
@@ -156,7 +166,7 @@ const Auth = () => {
               {t("auth.password")}
               <span className="relative mt-2 block">
                 <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input type={showPassword ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} required minLength={6} autoComplete={isSignUp ? "new-password" : "current-password"} className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-12 font-normal outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100" />
+                <input type={showPassword ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} required minLength={isSignUp ? 12 : 1} maxLength={72} autoComplete={isSignUp ? "new-password" : "current-password"} className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-12 font-normal outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100" />
                 <button type="button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? t("auth.hidePassword") : t("auth.showPassword")} className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-700">
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -168,15 +178,24 @@ const Auth = () => {
             <button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center rounded-2xl bg-blue-600 py-3.5 font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 hover:shadow-blue-600/30 active:scale-[.99] disabled:cursor-not-allowed disabled:opacity-60">
               {isSubmitting ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : isSignUp ? t("auth.signupButton") : t("auth.loginButton")}
             </button>
-          </form>
+          </form>}
 
-          <p className="mt-7 text-center text-sm text-slate-500">
-            {isSignUp ? t("auth.haveAccount") : t("auth.noAccount")}{" "}
-            <button type="button" onClick={switchMode} className="font-bold text-blue-600 hover:text-blue-700">
-              {isSignUp ? t("auth.loginLink") : t("auth.signupLink")}
-            </button>
-          </p>
-          <p className="mt-5 text-center text-xs leading-5 text-slate-400">{t("auth.privacyNote")}</p>
+          {!isRecoveringPassword && (
+            <>
+              {!isSignUp && (
+                <button type="button" onClick={() => setIsRecoveringPassword(true)} className="mt-5 self-center text-sm font-bold text-blue-600 hover:text-blue-700">
+                  {t("auth.forgotPassword")}
+                </button>
+              )}
+              <p className="mt-7 text-center text-sm text-slate-500">
+                {isSignUp ? t("auth.haveAccount") : t("auth.noAccount")}{" "}
+                <button type="button" onClick={switchMode} className="font-bold text-blue-600 hover:text-blue-700">
+                  {isSignUp ? t("auth.loginLink") : t("auth.signupLink")}
+                </button>
+              </p>
+              <p className="mt-5 text-center text-xs leading-5 text-slate-400">{t("auth.privacyNote")}</p>
+            </>
+          )}
         </section>
       </div>
     </main>
