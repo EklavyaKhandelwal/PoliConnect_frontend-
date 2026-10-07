@@ -25,6 +25,16 @@ export const signUp = async (
   return response.data;
 };
 
+export const requestPasswordReset = async (email: string): Promise<void> => {
+  await api.post("/api/v1/user/forgot-password", { email });
+};
+
+export const resetPassword = async (
+  details: { email: string; code: string; password: string },
+): Promise<void> => {
+  await api.post("/api/v1/user/reset-password", details);
+};
+
 export const getCurrentUser = async (): Promise<AuthUser> => {
   const response = await api.get<{ user: AuthUser }>("/api/v1/user/me");
   return response.data.user;

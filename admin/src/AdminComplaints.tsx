@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   FiAlertCircle,
   FiClipboard,
@@ -154,6 +154,7 @@ export default function AdminComplaints({
   const [error, setError] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [openedComplaint, setOpenedComplaint] = useState<string | null>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
   const normalizedSearch = useMemo(() => search.trim(), [search]);
 
   useEffect(() => {
@@ -210,6 +211,25 @@ export default function AdminComplaints({
   };
   const statusLabel = (value: Status) => t[value];
 
+  useEffect(() => {
+    const tabsElement = tabsRef.current;
+    if (!tabsElement) return;
+    const activeTab = tabsElement.querySelector<HTMLElement>(".queue-tab-active");
+    const indicator = tabsElement.querySelector<HTMLElement>(".queue-tab-indicator");
+    if (!activeTab || !indicator) return;
+
+    const updateIndicator = () => {
+      indicator.style.width = `${activeTab.offsetWidth}px`;
+      indicator.style.transform = `translateX(${activeTab.offsetLeft}px)`;
+    };
+    updateIndicator();
+
+    const resizeObserver = new ResizeObserver(updateIndicator);
+    resizeObserver.observe(tabsElement);
+    resizeObserver.observe(activeTab);
+    return () => resizeObserver.disconnect();
+  }, [status, language, data?.counts]);
+
   return (
     <section className="admin-complaints" aria-busy={loading}>
       <div className="admin-complaints-heading">
@@ -217,7 +237,8 @@ export default function AdminComplaints({
         {loading && <span className="queue-loading-indicator"><FiRefreshCw className="queue-spin" />{t.loading}</span>}
       </div>
 
-      <div className="queue-tabs" role="tablist" aria-label={t.status}>
+      <div className="queue-tabs" role="tablist" aria-label={t.status} ref={tabsRef}>
+        <span className="queue-tab-indicator" aria-hidden="true" />
         {tabs.map((tab) => (
           <button
             type="button"
@@ -276,23 +297,24 @@ export default function AdminComplaints({
         </div>
       )}
 
-      {error ? (
-        <div className="queue-state queue-error" role="alert">
-          <FiAlertCircle />
-          <h2>{t.errorTitle}</h2>
-          <p>{error}</p>
-          <button type="button" onClick={() => setRetryKey((key) => key + 1)}><FiRefreshCw />{t.retry}</button>
-        </div>
-      ) : !loading && data && data.total === 0 ? (
-        <div className="queue-state">
-          <FiClipboard />
-          <h2>{t.emptyTitle}</h2>
-          <p>{t.emptyBody}</p>
-          <button type="button" onClick={resetFilters}>{t.reset}</button>
-        </div>
-      ) : (
-        <div className="queue-table-wrap">
-          <table className="queue-table">
+      <div className="queue-results" key={status}>
+        {error ? (
+          <div className="queue-state queue-error" role="alert">
+            <FiAlertCircle />
+            <h2>{t.errorTitle}</h2>
+            <p>{error}</p>
+            <button type="button" onClick={() => setRetryKey((key) => key + 1)}><FiRefreshCw />{t.retry}</button>
+          </div>
+        ) : !loading && data && data.total === 0 ? (
+          <div className="queue-state">
+            <FiClipboard />
+            <h2>{t.emptyTitle}</h2>
+            <p>{t.emptyBody}</p>
+            <button type="button" onClick={resetFilters}>{t.reset}</button>
+          </div>
+        ) : (
+          <div className="queue-table-wrap">
+            <table className="queue-table">
             <thead>
               <tr>
                 <th className="queue-select-cell"><input type="checkbox" aria-label={t.selectPage} checked={allPageSelected} onChange={togglePageSelection} /></th>
@@ -337,9 +359,10 @@ export default function AdminComplaints({
               })}
               {loading && pageRows.length === 0 && <tr><td colSpan={9} className="queue-table-loading">{t.loading}</td></tr>}
             </tbody>
-          </table>
-        </div>
-      )}
+            </table>
+          </div>
+        )}
+      </div>
 
       {!error && data && data.total > 0 && (
         <div className="queue-pagination">

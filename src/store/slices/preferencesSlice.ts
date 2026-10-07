@@ -9,6 +9,7 @@ export interface PreferencesState {
   autoSend: boolean;
   largeText: boolean;
   vibration: boolean;
+  notificationSound: boolean;
 }
 
 const defaults: PreferencesState = {
@@ -20,6 +21,7 @@ const defaults: PreferencesState = {
   autoSend: false,
   largeText: false,
   vibration: true,
+  notificationSound: false,
 };
 
 const loadPreferences = (): PreferencesState => {

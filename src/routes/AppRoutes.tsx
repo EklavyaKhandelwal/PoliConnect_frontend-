@@ -18,6 +18,8 @@ import { clearAuth, setUser } from "../store/slices/authSlice";
 import { clearChat } from "../store/slices/chatSlice";
 import { getCurrentUser } from "../services/authService";
 import { getAccessToken, setAccessToken } from "../services/api";
+import Notifications from "../pages/Notifications/Notifications";
+import { CitizenNotificationProvider } from "../components/CitizenNotificationProvider";
 
 const AuthBootstrap = () => {
   const dispatch = useAppDispatch();
@@ -45,6 +47,7 @@ const AuthBootstrap = () => {
 const AppRoutes = () => {
   return (
     <BrowserRouter>
+      <CitizenNotificationProvider>
       <AuthBootstrap />
       <Routes>
         <Route path="/auth" element={<Auth />} />
@@ -60,7 +63,9 @@ const AppRoutes = () => {
         <Route path="/voice/:conversationId" element={<VoiceAssistant />} />
         <Route path="/history" element={<History />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/notifications" element={<Notifications />} />
       </Routes>
+      </CitizenNotificationProvider>
     </BrowserRouter>
   );
 };

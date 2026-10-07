@@ -9,6 +9,7 @@ import { clearChat } from "../../store/slices/chatSlice";
 import { setPreference } from "../../store/slices/preferencesSlice";
 import ConfirmationSheet from "../../components/ConfirmationSheet";
 import { triggerHaptic } from "../../services/haptics";
+import { playNotificationSound } from "../../services/notificationSound";
 
 interface ToggleRowProps {
   title: string;
@@ -56,6 +57,7 @@ const Settings = () => {
   const updatePreference = <K extends keyof typeof preferences>(key: K, value: typeof preferences[K]) => {
     dispatch(setPreference({ key, value }));
     void triggerHaptic(preferences.vibration);
+    if (key === "notificationSound" && value === true) playNotificationSound();
   };
 
   return (
@@ -107,6 +109,17 @@ const Settings = () => {
               )}
             </section>
           )}
+          <section>
+            <h2 className="mb-3 px-2 text-base font-semibold text-slate-500">{t("settingsPage.notificationsSection")}</h2>
+            <div className="rounded-2xl bg-white px-3 shadow-sm sm:rounded-3xl sm:px-5">
+              <ToggleRow
+                title={t("settingsPage.notificationSound")}
+                description={t("settingsPage.notificationSoundDescription")}
+                enabled={preferences.notificationSound}
+                onToggle={() => updatePreference("notificationSound", !preferences.notificationSound)}
+              />
+            </div>
+          </section>
           <section>
             <h2 className="mb-3 px-2 text-base font-semibold text-slate-500">{t("settingsPage.listenSection")}</h2>
             <div className="rounded-2xl bg-white px-3 shadow-sm sm:rounded-3xl sm:px-5">

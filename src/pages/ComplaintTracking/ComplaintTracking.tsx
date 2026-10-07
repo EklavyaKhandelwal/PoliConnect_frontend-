@@ -12,6 +12,7 @@ import {
 } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+import { usePullToRefresh } from "../../hooks/usePullToRefresh";
 import {
   getComplaints,
   type ComplaintCategory,
@@ -94,6 +95,7 @@ const ComplaintTracking = () => {
       (complaint.status === "resolved" && complaint.citizenFeedback?.confirmation === "resolved"),
   );
   const visibleComplaints = selectedTab === "active" ? activeComplaints : resolvedComplaints;
+  const pullToRefresh = usePullToRefresh(loadComplaints, isLoading);
 
   const formatDate = (date: string) =>
     new Intl.DateTimeFormat(i18n.resolvedLanguage ?? i18n.language, {
@@ -102,7 +104,24 @@ const ComplaintTracking = () => {
     }).format(new Date(date));
 
   return (
-    <main className="flex min-h-dvh flex-col bg-gradient-to-b from-blue-100 via-blue-50 to-white text-slate-900">
+    <main
+      className="flex min-h-dvh flex-col bg-gradient-to-b from-blue-100 via-blue-50 to-white text-slate-900"
+      onTouchStart={pullToRefresh.onTouchStart}
+      onTouchMove={pullToRefresh.onTouchMove}
+      onTouchEnd={pullToRefresh.onTouchEnd}
+      onTouchCancel={pullToRefresh.onTouchCancel}
+    >
+      {(pullToRefresh.pullDistance > 0 || pullToRefresh.refreshing) && (
+        <div
+          className="fixed left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-blue-700 shadow-lg"
+          role="status"
+          aria-live="polite"
+          style={{ top: `${Math.max(12, pullToRefresh.pullDistance)}px` }}
+        >
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-blue-100 border-t-blue-600" />
+          {pullToRefresh.refreshing ? t("complaintTracking.loading") : t("complaintTracking.refresh")}
+        </div>
+      )}
       <header className="border-b border-blue-100 bg-white px-5 py-4">
         <div className="mx-auto flex w-full max-w-2xl items-center gap-4">
           <button
@@ -169,9 +188,10 @@ const ComplaintTracking = () => {
         </div>
 
         {isLoading ? (
-          <p role="status" className="rounded-3xl bg-white p-6 text-center text-slate-500 shadow-sm">
-            {t("complaintTracking.loading")}
-          </p>
+          <div role="status" aria-live="polite" className="flex flex-col items-center gap-3 rounded-3xl bg-white p-8 text-center text-slate-500 shadow-sm">
+            <span className="h-9 w-9 animate-spin rounded-full border-4 border-blue-100 border-t-blue-600" />
+            <span>{t("complaintTracking.loading")}</span>
+          </div>
         ) : hasError ? (
           <div role="alert" className="rounded-3xl bg-white p-6 text-center shadow-sm">
             <p className="text-slate-600">{t("complaintTracking.loadError")}</p>

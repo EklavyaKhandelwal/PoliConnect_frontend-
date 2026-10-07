@@ -17,6 +17,19 @@
   "auth.name": "Full name",
   "auth.email": "Email address",
   "auth.password": "Password",
+  "auth.forgotPassword": "Forgot password?",
+  "auth.recoveryTitle": "Reset your password",
+  "auth.recoveryDescription": "We’ll email a one-time code if an account is registered with that address.",
+  "auth.backToLogin": "Back to sign in",
+  "auth.recoveryCode": "6-digit email code",
+  "auth.resendCode": "Send a new code",
+  "auth.resendCodeCountdown": "Send a new code in {{seconds}}s",
+  "auth.newPassword": "New password (at least 12 characters)",
+  "auth.sendRecoveryCode": "Send recovery code",
+  "auth.resetPasswordButton": "Reset password",
+  "auth.recoveryRequested": "If an account matches that email, a code will be delivered shortly.",
+  "auth.passwordResetSuccess": "Your password has been updated. Please sign in.",
+  "auth.recoveryError": "Could not complete password recovery. Check your details and try again.",
   "auth.loginButton": "Sign in",
   "auth.signupButton": "Create account",
   "auth.haveAccount": "Already have an account?",
@@ -36,6 +49,28 @@
   "auth.deleteAccount": "Delete account",
   "ok": "OK",
   "close": "Close",
+  "notifications.title": "Notifications",
+  "notifications.subtitle": "{{count}} unread",
+  "notifications.unreadLabel": "{{count}} unread notifications",
+  "notifications.filters": "Notification filter",
+  "notifications.filter.all": "All",
+  "notifications.filter.unread": "Unread",
+  "notifications.unread": "Unread",
+  "notifications.markAllRead": "Mark all read",
+  "notifications.refresh": "Refresh notifications",
+  "notifications.loading": "Loading notifications…",
+  "notifications.loadMore": "Load more",
+  "notifications.loadError": "Could not load notifications.",
+  "notifications.readError": "Could not update notification status.",
+  "notifications.retry": "Try again",
+  "notifications.emptyTitle": "You’re all caught up",
+  "notifications.emptyDescription": "Complaint messages and updates will appear here.",
+  "notifications.events.registered": "Complaint received",
+  "notifications.events.assigned": "Complaint assigned",
+  "notifications.events.status_changed": "Complaint status updated",
+  "notifications.events.resolved": "Complaint marked resolved",
+  "notifications.events.rejected": "Complaint rejected",
+  "notifications.events.message": "New message from the administration",
   "languageSheet.title": "Choose language",
   "languageSheet.subtitle": "You can change this anytime from the top menu.",
 
@@ -510,6 +545,9 @@
   ,"settingsPage.title": "Voice and listening"
   ,"settingsPage.subtitle": "Choose how you hear and speak"
   ,"settingsPage.listenSection": "Listen (voice answers)"
+  ,"settingsPage.notificationsSection": "Notifications"
+  ,"settingsPage.notificationSound": "Notification sound"
+  ,"settingsPage.notificationSoundDescription": "Play a short sound for new updates while the app is open"
   ,"settingsPage.answerVoice": "Read answers aloud"
   ,"settingsPage.answerVoiceDescription": "Every answer will be read aloud"
   ,"settingsPage.speed": "Playback speed"

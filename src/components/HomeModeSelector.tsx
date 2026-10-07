@@ -32,28 +32,36 @@ const HomeModeSelector = () => {
   return (
     <nav
       aria-label={t("home.assistantModes")}
-      className="mt-3 flex w-full rounded-full border border-white/80 bg-blue-50/90 p-1 shadow-sm sm:mt-6"
+      className="mt-3 flex w-full rounded-[22px] border border-white/90 bg-white/55 p-1.5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.3)] backdrop-blur-lg sm:mt-4 sm:rounded-3xl sm:p-2"
     >
       <button
         type="button"
         aria-current={!complaintMode ? "page" : undefined}
         onClick={() => navigate("/")}
-        className={`flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-2 py-2.5 text-xs font-bold transition sm:gap-2 sm:px-3 sm:py-3 sm:text-base ${
-          !complaintMode ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-blue-700"
+        className={`flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border px-2 py-2.5 text-sm font-bold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:min-h-14 sm:gap-2 sm:px-3 sm:text-base ${
+          !complaintMode
+            ? "border-white bg-white text-slate-900 shadow-[0_4px_12px_-6px_rgba(15,23,42,0.35)]"
+            : "border-transparent text-slate-600 hover:bg-white/60 hover:text-blue-700"
         }`}
       >
-        <FiMessageCircle className="shrink-0 text-blue-600" size={19} />
+        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-xl ${!complaintMode ? "bg-blue-50 text-blue-600" : ""}`}>
+          <FiMessageCircle size={17} />
+        </span>
         <span className="truncate">{t("home.aiAssistant")}</span>
       </button>
       <button
         type="button"
         aria-current={complaintMode ? "page" : undefined}
         onClick={() => navigate("/complaint-center")}
-        className={`flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-2 py-2.5 text-xs font-bold transition sm:gap-2 sm:px-3 sm:py-3 sm:text-base ${
-          complaintMode ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-blue-700"
+        className={`flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border px-2 py-2.5 text-sm font-bold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:min-h-14 sm:gap-2 sm:px-3 sm:text-base ${
+          complaintMode
+            ? "border-white bg-white text-slate-900 shadow-[0_4px_12px_-6px_rgba(15,23,42,0.35)]"
+            : "border-transparent text-slate-600 hover:bg-white/60 hover:text-blue-700"
         }`}
       >
-        <FiClipboard className="shrink-0" size={18} />
+        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-xl ${complaintMode ? "bg-blue-50 text-blue-600" : ""}`}>
+          <FiClipboard size={17} />
+        </span>
         <span className="truncate">{t("home.complaintCenter")}</span>
         {activeCount > 0 && (
           <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold text-white sm:h-6 sm:min-w-6 sm:text-xs">

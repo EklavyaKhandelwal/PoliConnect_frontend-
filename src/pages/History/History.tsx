@@ -148,7 +148,12 @@ const History = () => {
             {query && <button type="button" onClick={() => setQuery("")} aria-label={t("historyPage.clearSearch")}><FiX /></button>}
           </label>
 
-          {isLoading && <p className="py-8 text-center text-sm text-slate-500">Loading saved conversations...</p>}
+          {isLoading && (
+            <div role="status" aria-live="polite" className="flex flex-col items-center gap-3 py-10 text-center text-sm text-slate-500">
+              <span className="h-9 w-9 animate-spin rounded-full border-4 border-blue-100 border-t-blue-600" aria-hidden="true" />
+              <span>Loading saved conversations...</span>
+            </div>
+          )}
           {loadError && <p className="py-8 text-center text-sm text-red-600">{loadError}</p>}
           {actionError && <p className="py-3 text-center text-sm text-red-600">{actionError}</p>}
           {!isLoading && !loadError && !chats.length && <p className="py-8 text-center text-sm text-slate-500">No saved conversations yet.</p>}

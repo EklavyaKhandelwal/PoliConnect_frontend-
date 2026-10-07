@@ -18,6 +18,7 @@ import {
 } from "react-icons/fi";
 import { useAdminAuth } from "./adminAuth";
 import AdminSelect from "./AdminSelect";
+import type { AdminConfiguration, ComplaintCategoryKey } from "./adminSettingsTypes";
 
 type Language = "en" | "hi" | "mr";
 type Status = "received" | "under_review" | "in_progress" | "waiting_for_citizen" | "resolved" | "rejected";
@@ -39,7 +40,7 @@ interface Officer {
 
 interface AdminComplaint {
   complaintNumber: string;
-  category: string;
+  category: ComplaintCategoryKey;
   details: string;
   photos: string[];
   location: { area?: string; latitude?: number; longitude?: number };
@@ -315,8 +316,9 @@ export default function AdminComplaintDetail({
       request<{ complaint: AdminComplaint }>(`/complaints/${encodeURIComponent(complaintNumber)}`),
       request<{ departments: Department[] }>("/departments"),
       request<{ officers: Officer[] }>("/officers"),
+      request<{ settings: AdminConfiguration }>("/settings"),
     ])
-      .then(([detail, departmentResult, officerResult]) => {
+      .then(([detail, departmentResult, officerResult, settingsResult]) => {
         if (!active) return;
         setComplaint(detail.complaint);
         setDepartments(departmentResult.departments.filter((item) => item.active));
@@ -324,6 +326,7 @@ export default function AdminComplaintDetail({
         const department = detail.complaint.assignedDepartment?.id ?? "";
         setDepartmentId(department);
         setOfficerId(detail.complaint.assignedOfficer?.id ?? "");
+        setWorkingDays(String(settingsResult.settings.slaWorkingDays[detail.complaint.category]));
         setStatus(
           detail.complaint.status === "received" ? "under_review" :
           detail.complaint.status === "under_review" || detail.complaint.status === "waiting_for_citizen" ? "in_progress" :
