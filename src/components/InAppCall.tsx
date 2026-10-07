@@ -18,7 +18,6 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../hooks/useLanguage";
 import { transcribeVoiceMessage } from "../services/chatService";
 import {
-  createComplaint,
   getComplaints,
   type ComplaintRecord,
 } from "../services/complaints";
@@ -29,6 +28,8 @@ import {
   type VoiceCallComplaintDraft,
   type VoiceCallTurn,
 } from "../services/voiceCall";
+import { isAffirmativeVoiceConfirmation } from "../services/voiceCallConfirmation";
+import { submitVoiceCallComplaint } from "../services/voiceCallComplaintSubmission";
 
 type CallPhase = "listening" | "thinking" | "speaking" | "error" | "ended";
 
@@ -65,14 +66,6 @@ const BARGE_IN_WARMUP_MS = 400;
 // Used only if the speech engine never reports that audio started.
 const BARGE_IN_FALLBACK_START_MS = 1200;
 const SHOW_MIC_DEBUG = false;
-
-const AFFIRMATIVE_CONFIRMATION =
-  /^(?:yes(?: please| submit(?: it| my complaint)?| go ahead| that's right| i confirm)?|yeah(?: please| submit(?: it)?| go ahead| that's right)?|yep|correct|that's right|that is right|i confirm|confirm(?: it| my complaint)?|submit(?: it| my complaint)?|go ahead(?: and submit)?|do it|please do(?: it)?|proceed|proceed with it|go for it|sure|haan(?: ji)?|han(?: ji)?|हाँ(?: जी| सही है| मैं पुष्टि करता हूँ| मैं पुष्टि करती हूँ| जमा करें| दर्ज करें| कर दीजिए| कर दो)?|हां(?: जी| सही है| जमा करें| दर्ज करें| कर दीजिए| कर दो)?|जी(?: हाँ| हां)?|कर दीजिए|कर दो|दर्ज करें|हो(?:य)?|होय|हो नोंदवा|बरोबर|नोंदवा|करा)[\s]*$/iu;
-
-const isAffirmativeConfirmation = (transcript: string) =>
-  AFFIRMATIVE_CONFIRMATION.test(
-    transcript.trim().replace(/[.!?,]+/gu, " ").replace(/\s+/gu, " "),
-  );
 
 const speechLanguage: Record<string, string> = {
   en: "en-IN",
@@ -123,7 +116,6 @@ const InAppCall = ({ onEnd }: { onEnd: (submittedComplaintNumber?: string) => vo
   const submittedComplaintNumberRef = useRef<string | null>(null);
   const endCallAfterReplyRef = useRef(false);
   const pendingTranscriptRef = useRef<string | null>(null);
-  const serverConfirmedTranscriptRef = useRef<string | null>(null);
   const speechQueueRef = useRef<string[]>([]);
   const speechTimerRef = useRef<number | null>(null);
   const speechSequenceRef = useRef(0);
@@ -425,70 +417,51 @@ const InAppCall = ({ onEnd }: { onEnd: (submittedComplaintNumber?: string) => vo
     setCallPhase("thinking");
     let isCreatingComplaint = false;
     let submittedComplaintNumber: string | null = null;
+    const createConfirmedComplaint = async (draft: VoiceCallComplaintDraft) => {
+      isCreatingComplaint = true;
+      const submission = {
+        category: draft.category,
+        details: draft.details,
+        area: draft.area,
+        name: draft.name,
+        phone: draft.phone,
+      };
+      const fingerprint = JSON.stringify(submission);
+      if (complaintSubmissionRef.current?.fingerprint !== fingerprint) {
+        complaintSubmissionRef.current = {
+          fingerprint,
+          key: createIdempotencyKey(),
+        };
+      }
+      const result = await submitVoiceCallComplaint(draft, complaintSubmissionRef.current.key);
+      submittedComplaintNumber = result.complaintNumber;
+      setComplaints(result.complaints);
+      pendingTranscriptRef.current = null;
+      complaintSubmissionRef.current = null;
+      if (!mountedRef.current || isCallEnded()) return;
+      setHasPendingTranscript(false);
+      const reply = t("inAppCall.complaintCreated", {
+        complaintNumber: result.complaintNumber,
+      });
+      setComplaintDraft(undefined);
+      setAwaitingComplaintConfirmation(false);
+      setCallTurns((turns) => [
+        ...turns,
+        { role: "user" as const, content: transcript },
+        { role: "assistant" as const, content: reply },
+      ].slice(-8));
+      submittedComplaintNumberRef.current = result.complaintNumber;
+      endCallAfterReplyRef.current = true;
+      setCallPhase("speaking");
+      speakReply(reply);
+    };
     try {
       if (
-        (awaitingComplaintConfirmation || serverConfirmedTranscriptRef.current === transcript) &&
-        (isAffirmativeConfirmation(transcript) || serverConfirmedTranscriptRef.current === transcript) &&
-        complaintDraft?.category &&
-        complaintDraft.details?.trim() &&
-        complaintDraft.area?.trim() &&
-        complaintDraft.name !== undefined &&
-        complaintDraft.phone &&
-        complaintDraft.phone.replace(/\D/g, "").length === 10 &&
-        complaintDraft.privateName !== undefined
+        awaitingComplaintConfirmation &&
+        isAffirmativeVoiceConfirmation(transcript) &&
+        complaintDraft
       ) {
-        isCreatingComplaint = true;
-        const submission = {
-          category: complaintDraft.category,
-          details: complaintDraft.details,
-          area: complaintDraft.area,
-          name: complaintDraft.name,
-          phone: complaintDraft.phone,
-          privateName: complaintDraft.privateName,
-        };
-        const fingerprint = JSON.stringify(submission);
-        if (complaintSubmissionRef.current?.fingerprint !== fingerprint) {
-          complaintSubmissionRef.current = {
-            fingerprint,
-            key: createIdempotencyKey(),
-          };
-        }
-        const created = await createComplaint({
-          ...submission,
-          photos: [],
-          coordinates: null,
-        }, complaintSubmissionRef.current.key);
-        submittedComplaintNumber = created.complaintNumber;
-        let refreshedComplaints: ComplaintRecord[];
-        try {
-          refreshedComplaints = await getComplaints();
-        } catch (error) {
-          console.error("Complaint was created, but its visibility could not be verified:", error);
-          throw error;
-        }
-        setComplaints(refreshedComplaints);
-        if (!refreshedComplaints.some((complaint) => complaint.complaintNumber === created.complaintNumber)) {
-          throw new Error("Created complaint is missing from the caller's complaint list.");
-        }
-        serverConfirmedTranscriptRef.current = null;
-        pendingTranscriptRef.current = null;
-        complaintSubmissionRef.current = null;
-        if (!mountedRef.current || isCallEnded()) return;
-        setHasPendingTranscript(false);
-        const reply = t("inAppCall.complaintCreated", {
-          complaintNumber: created.complaintNumber,
-        });
-        setComplaintDraft(undefined);
-        setAwaitingComplaintConfirmation(false);
-        setCallTurns((turns) => [
-          ...turns,
-          { role: "user" as const, content: transcript },
-          { role: "assistant" as const, content: reply },
-        ].slice(-8));
-        submittedComplaintNumberRef.current = created.complaintNumber;
-        endCallAfterReplyRef.current = true;
-        setCallPhase("speaking");
-        speakReply(reply);
+        await createConfirmedComplaint(complaintDraft);
         return;
       }
 
@@ -501,10 +474,7 @@ const InAppCall = ({ onEnd }: { onEnd: (submittedComplaintNumber?: string) => vo
       });
       if (!mountedRef.current || isCallEnded()) return;
       if (result.action === "submit") {
-        serverConfirmedTranscriptRef.current = transcript;
-        pendingTranscriptRef.current = transcript;
-        setHasPendingTranscript(true);
-        window.setTimeout(() => transcriptHandlerRef.current(transcript), 0);
+        await createConfirmedComplaint(result.complaintDraft ?? complaintDraft ?? {});
         return;
       }
       pendingTranscriptRef.current = null;
